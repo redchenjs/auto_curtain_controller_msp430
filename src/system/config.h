@@ -62,48 +62,49 @@ typedef uint8_t byte;
 /*------------------------------------------------------------------------------------------------------*/
 //MSP430G2553
 #include "msp430g2553.h"
-#include "bcs.h"
-#include "wdt.h"
-#include "delay.h"
-#include "timer.h"
-#include "gpio.h"
-#include "flash.h"
+
+#include "../device/bcs.h"
+#include "../device/wdt.h"
+#include "../device/delay.h"
+#include "../device/timer.h"
+#include "../device/gpio.h"
+#include "../device/flash.h"
 
 #define irq_enable() _enable_interrupts()
 #define irq_disable() _disable_interrupts()
 
 /*------------------------------------------------------------------------------------------------------*/
 //init
-#include "init.h"
-#include "fonts.h"
-#include "user.h"
+#include "../system/init.h"
+#include "../system/fonts.h"
+#include "../user/user.h"
 
 /*------------------------------------------------------------------------------------------------------*/
 //Flash
-#include "record.h"
+#include "../user/record.h"
 
 /*------------------------------------------------------------------------------------------------------*/
 //SPI
-#include "spi.h"
+#include "../interface/spi.h"
 
-#include "SSD1331.h"
-#include "display.h"
+#include "../driver/SSD1331.h"
+#include "../user/display.h"
 
 /*------------------------------------------------------------------------------------------------------*/
 //I2C
-#include "twi.h"
-#include "i2c.h"
+#include "../interface/twi.h"
+#include "../interface/i2c.h"
 
-#include "BH1750.h"
-#include "senser.h"
+#include "../driver/BH1750.h"
+#include "../user/senser.h"
 
-#include "DS3231.h"
-#include "clock.h"
+#include "../driver/DS3231.h"
+#include "../user/clock.h"
 
 /*------------------------------------------------------------------------------------------------------*/
 //Stepper
-#include "Stepper.h"
-#include "motor.h"
+#include "../driver/Stepper.h"
+#include "../user/motor.h"
 
 /*------------------------------------------------------------------------------------------------------*/
 #endif

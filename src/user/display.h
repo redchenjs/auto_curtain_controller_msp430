@@ -8,7 +8,7 @@
 #ifndef SRC_USER_DISPLAY_H_
 #define SRC_USER_DISPLAY_H_
 
-#include "config.h"
+#include "../system/config.h"
 
 void display_refreshLux(void);
 void display_refreshSet(void);

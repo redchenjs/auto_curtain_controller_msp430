@@ -7,7 +7,7 @@
 
 #ifndef SRC_DELAY_H_
 #define SRC_DELAY_H_
-#include "config.h"
+#include "../system/config.h"
 
 void delay_us(uint16_t cycles=1);
 void delay_ms(uint16_t cycles=1);

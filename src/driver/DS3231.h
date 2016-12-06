@@ -16,7 +16,7 @@
 #ifndef DS3231_h
 #define DS3231_h
 
-#include "config.h"
+#include "../system/config.h"
 
 class DS3231 {
 	public:

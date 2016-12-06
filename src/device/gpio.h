@@ -6,7 +6,7 @@
  */
 #ifndef SRC_GPIO_H_
 #define SRC_GPIO_H_
-#include "config.h"
+#include "../system/config.h"
 
 void gpio_init(void);
 void gpio_pinMode(uint8_t pin, uint8_t mode);

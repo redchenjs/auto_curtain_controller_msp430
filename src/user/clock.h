@@ -8,7 +8,7 @@
 #ifndef SRC_USER_CLOCK_H_
 #define SRC_USER_CLOCK_H_
 
-#include "config.h"
+#include "../system/config.h"
 
 void clock_getTime(void);
 

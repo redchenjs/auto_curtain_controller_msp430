@@ -1,6 +1,6 @@
 #ifndef i2c_h
 #define i2c_h
-#include <config.h>
+#include "../system/config.h"
 /*
  * ---------I2C---------
  * PORT		TYPE	PIN

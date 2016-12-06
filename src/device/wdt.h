@@ -7,7 +7,7 @@
 
 #ifndef SRC_DEVICE_WDT_H_
 #define SRC_DEVICE_WDT_H_
-#include "config.h"
+#include "../system/config.h"
 
 void wdt_init(void);
 

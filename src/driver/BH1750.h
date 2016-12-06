@@ -9,7 +9,7 @@
 #ifndef BH1750_h
 #define BH1750_h
 
-#include "config.h"
+#include "../system/config.h"
 
 class BH1750 {
 	public:

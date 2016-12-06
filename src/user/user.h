@@ -8,7 +8,7 @@
 #ifndef SRC_USER_USER_H_
 #define SRC_USER_USER_H_
 
-#include "config.h"
+#include "../system/config.h"
 
 void user_init(void);
 void user_loop(void);

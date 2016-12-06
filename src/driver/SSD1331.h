@@ -3,7 +3,7 @@
 #define _SSD1331_H_
 
 /* Includes ------------------------------------------------------------------*/
-#include "config.h"
+#include "../system/config.h"
 /*
  * --------SSD1331------
  * PORT		TYPE	PIN

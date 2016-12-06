@@ -4,7 +4,7 @@
  *  Created on: 2016年10月21日
  *      Author: redchenjs
  */
-#include "config.h"
+#include "../system/config.h"
 
 void user_init(void)
 {

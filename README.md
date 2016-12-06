@@ -1,5 +1,7 @@
 # bth_curtain
 
+编译选项：--cpp_default -fg --printf_support nofloat
+
 程序结构说明：
 
 	目录说明：

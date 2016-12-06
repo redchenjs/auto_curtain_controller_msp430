@@ -1,6 +1,6 @@
 #ifndef SPI_H_
 #define SPI_H_
-#include "config.h"
+#include "../system/config.h"
 /*
  * ---------SPI---------
  * PORT		TYPE	PIN

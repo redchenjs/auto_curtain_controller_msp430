@@ -1,5 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
-#include "config.h"
+#include "../system/config.h"
 
 void system_init(void)
 {
