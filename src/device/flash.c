@@ -20,7 +20,7 @@
  *  Created on: 2013-2-18
  *   Author: Administrator
  */
-#include  "MSP430G2553.h"
+#include  "../system/config.h"
 unsigned int SegAddr=0;						//全局变量
 unsigned int SegPre=0;						//全局变量 当前信息段
 /******************************************************************************************************

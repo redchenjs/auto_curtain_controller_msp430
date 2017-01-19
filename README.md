@@ -2,7 +2,7 @@
 
 一个基于MSP430G2553超低功耗单片机，BH1750FVI光照度传感器，DS3231时钟芯片，HC-05蓝牙UART模块，SSD1331 96x96 RGB显示屏的家用自动窗帘控制器设计。
 
-**编译选项：--cpp_default -fg --printf_support nofloat**
+**编译选项： --cpp_default --printf_support=nofloat **
 
 **程序结构说明：**
 
