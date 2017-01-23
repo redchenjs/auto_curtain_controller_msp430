@@ -1,4 +1,4 @@
-## bth_curtain_core
+# bth_curtain_core
 
 A simple design of an automatic curtain controller based on msp430g2553 core，bh1750fvi light senser，ds3231 rtc moudule，hc-05 bluetooth uart and ssd1331 96x96 rgb oled for display.
 
@@ -6,13 +6,13 @@ A simple design of an automatic curtain controller based on msp430g2553 core，b
 
 ** compiler flag： --cpp_default --printf_support=nofloat **
 
-## How to compile ?
+# How to compile ?
 
-# Step 1: Clone the git
+## Step 1: Clone the git
 * Use command:
 `git clone https://github.com/redchenjs/bth_curtain_core.git`
 
-# Step 2: Create a new CCS Project
+## Step 2: Create a new CCS Project
 
 * Use "New Project" Wizard to create a new CCS Project.
 
@@ -26,5 +26,5 @@ A simple design of an automatic curtain controller based on msp430g2553 core，b
 
 * Then click the "Finish" button to finish the wizard.
 
-# Step 3：Compile
+## Step 3：Compile
 * Add the function you like and compile it.
