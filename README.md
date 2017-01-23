@@ -4,7 +4,7 @@ A simple design of an automatic curtain controller based on msp430g2553 core，b
 
 *Tips: This project contains source code only, CCS Project files has been removed to keep compatibility with version differerces of CCS-IDE, you should create the CCS Project manually.*
 
-** compiler flag： --cpp_default --printf_support=nofloat **
+**compiler flag： --cpp_default --printf_support=nofloat**
 
 # How to compile ?
 
