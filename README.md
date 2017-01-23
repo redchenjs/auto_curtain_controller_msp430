@@ -2,7 +2,7 @@
 
 A simple design of an automatic curtain controller based on msp430g2553 core，bh1750fvi light senser，ds3231 rtc moudule，hc-05 bluetooth uart and ssd1331 96x96 rgb oled for display.
 
-*Tips: This project contains source code only, CCS Project files has been removed to keep compatibility with version differerces of CCS-IDE, you should create the CCS Project manually.*
+*Tips: This project contains source code only, CCS Project files has been removed to keep compatibility with version differerces of CCS IDE, you should create the CCS Project manually.*
 
 **compiler flag： --cpp_default --printf_support=nofloat**
 
