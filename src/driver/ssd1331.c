@@ -1,5 +1,31 @@
 /* Includes ------------------------------------------------------------------*/
-#include "SSD1331.h"
+#include <msp430g2553.h>
+#include "../system/fonts.h"
+#include "../interface/spi.h"
+#include "../driver/ssd1331.h"
+/*
+ * --------SSD1331------
+ * PORT		TYPE	PIN
+ * RES		OUT		P3.6
+ * DC		OUT		P3.7
+ * CS		OUT		P1.4
+ * SCK		OUT		SPI
+ * MOSI		OUT		SPI
+ * ---------------------
+ */
+#define abs(x) ((x)>0?(x):-(x))
+#define min(a,b) ((a)<(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b))
+
+#define SSD1331_PIN_SET		P3DIR |= BIT6; P3DIR |= BIT7; P1DIR |= BIT4
+
+#define SSD1331_RES_SET()	P3OUT |= BIT6
+#define SSD1331_RES_CLR()	P3OUT &=~BIT6
+#define SSD1331_DC_SET()	P3OUT |= BIT7
+#define SSD1331_DC_CLR()	P3OUT &=~BIT7
+#define SSD1331_CS_SET()	P1OUT |= BIT4
+#define SSD1331_CS_CLR()	P1OUT &=~BIT4
+#define SSD1331_WRITE_BYTE(__DATA)	spi_transmit_frame(__DATA, 1)
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -56,7 +82,7 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-static void ssd1331_write_byte(uint8_t chData, uint8_t chCmd) 
+static void ssd1331_write_byte(unsigned char chData, unsigned char chCmd)
 {
 	if (chCmd) {
 	 	SSD1331_DC_SET();
@@ -71,7 +97,7 @@ static void ssd1331_write_byte(uint8_t chData, uint8_t chCmd)
 	SSD1331_DC_SET();
 }
 
-void ssd1331_draw_point(uint8_t chXpos, uint8_t chYpos, uint16_t hwColor) 
+void ssd1331_draw_point(unsigned char chXpos, unsigned char chYpos, unsigned int hwColor)
 {
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
 		return;
@@ -91,7 +117,7 @@ void ssd1331_draw_point(uint8_t chXpos, uint8_t chYpos, uint16_t hwColor)
 	ssd1331_write_byte(hwColor, SSD1331_DATA);   
 }
 
-void ssd1331_draw_line(uint8_t chXpos0, uint8_t chYpos0, uint8_t chXpos1, uint8_t chYpos1, uint16_t hwColor) 
+void ssd1331_draw_line(unsigned char chXpos0, unsigned char chYpos0, unsigned char chXpos1, unsigned char chYpos1, unsigned int hwColor)
 {
 	int x = chXpos1 - chXpos0;
     int y = chYpos1 - chYpos0;
@@ -117,9 +143,9 @@ void ssd1331_draw_line(uint8_t chXpos0, uint8_t chYpos0, uint8_t chXpos1, uint8_
     }
 }
 
-void ssd1331_draw_v_line(uint8_t chXpos, uint8_t chYpos, uint8_t chHeight, uint16_t hwColor)
+void ssd1331_draw_v_line(unsigned char chXpos, unsigned char chYpos, unsigned char chHeight, unsigned int hwColor)
 {	
-	uint16_t i, y1 = min(chYpos + chHeight, OLED_HEIGHT - 1);
+	unsigned int i, y1 = min(chYpos + chHeight, OLED_HEIGHT - 1);
 
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
 		return;
@@ -130,9 +156,9 @@ void ssd1331_draw_v_line(uint8_t chXpos, uint8_t chYpos, uint8_t chHeight, uint1
     }
 }
 
-void ssd1331_draw_h_line(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint16_t hwColor)
+void ssd1331_draw_h_line(unsigned char chXpos, unsigned char chYpos, unsigned char chWidth, unsigned int hwColor)
 {	
-	uint16_t i, x1 = min(chXpos + chWidth, OLED_WIDTH- 1);
+	unsigned int i, x1 = min(chXpos + chWidth, OLED_WIDTH- 1);
 
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
 		return;
@@ -143,7 +169,7 @@ void ssd1331_draw_h_line(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint16
     }
 }
 
-void ssd1331_draw_rect(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint8_t chHeight, uint16_t hwColor)
+void ssd1331_draw_rect(unsigned char chXpos, unsigned char chYpos, unsigned char chWidth, unsigned char chHeight, unsigned int hwColor)
 {
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
 		return;
@@ -155,9 +181,9 @@ void ssd1331_draw_rect(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint8_t 
 	ssd1331_draw_v_line(chXpos + chWidth, chYpos, chHeight + 1, hwColor);
 }
 
-void ssd1331_fill_rect(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint8_t chHeight, uint16_t hwColor)
+void ssd1331_fill_rect(unsigned char chXpos, unsigned char chYpos, unsigned char chWidth, unsigned char chHeight, unsigned int hwColor)
 {
-	uint16_t i, j;
+	unsigned int i, j;
 
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
 		return;
@@ -170,7 +196,7 @@ void ssd1331_fill_rect(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint8_t 
 	}
 }
 
-void ssd1331_draw_circle(uint8_t chXpos, uint8_t chYpos, uint8_t chRadius, uint16_t hwColor)
+void ssd1331_draw_circle(unsigned char chXpos, unsigned char chYpos, unsigned char chRadius, unsigned int hwColor)
 {
 	int x = -chRadius, y = 0, err = 2 - 2 * chRadius, e2;
 
@@ -201,10 +227,10 @@ void ssd1331_draw_circle(uint8_t chXpos, uint8_t chYpos, uint8_t chRadius, uint1
   * @param  chMode
   * @retval 
 **/
-void ssd1331_display_char(uint8_t chXpos, uint8_t chYpos, uint8_t chChr, uint8_t chSize, uint16_t hwColor)
+void ssd1331_display_char(unsigned char chXpos, unsigned char chYpos, unsigned char chChr, unsigned char chSize, unsigned int hwColor)
 {      	
-	uint8_t i, j, chTemp;
-	uint8_t chYpos0 = chYpos;
+	unsigned char i, j, chTemp;
+	unsigned char chYpos0 = chYpos;
 
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
 		return;
@@ -232,19 +258,19 @@ void ssd1331_display_char(uint8_t chXpos, uint8_t chYpos, uint8_t chChr, uint8_t
     } 
 }
 
-static uint32_t _pow(uint8_t m, uint8_t n)
+static unsigned long _pow(unsigned char m, unsigned char n)
 {
-	uint32_t result = 1;
+	unsigned long result = 1;
 	
 	while(n --) result *= m;    
 	return result;
 }
 
 
-void ssd1331_display_num(uint8_t chXpos, uint8_t chYpos, uint32_t chNum, uint8_t chLen, uint8_t chSize, uint16_t hwColor)
+void ssd1331_display_num(unsigned char chXpos, unsigned char chYpos, unsigned long chNum, unsigned char chLen, unsigned char chSize, unsigned int hwColor)
 {         	
-	uint8_t i;
-	uint8_t chTemp, chShow = 0;
+	unsigned char i;
+	unsigned char chTemp, chShow = 0;
 
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
 		return;
@@ -274,7 +300,7 @@ void ssd1331_display_num(uint8_t chXpos, uint8_t chYpos, uint32_t chNum, uint8_t
   *         
   * @retval  None
 **/
-void ssd1331_display_string(uint8_t chXpos, uint8_t chYpos, const char *pchString, uint8_t chSize, uint16_t hwColor)
+void ssd1331_display_string(unsigned char chXpos, unsigned char chYpos, const char *pchString, unsigned char chSize, unsigned int hwColor)
 {
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
 		return;
@@ -296,10 +322,10 @@ void ssd1331_display_string(uint8_t chXpos, uint8_t chYpos, const char *pchStrin
     } 
 }
 
-void ssd1331_draw_1616char(uint8_t chXpos, uint8_t chYpos, uint8_t chChar, uint16_t hwColor)
+void ssd1331_draw_1616char(unsigned char chXpos, unsigned char chYpos, unsigned char chChar, unsigned int hwColor)
 {
-	uint8_t i, j;
-	uint8_t chTemp = 0, chYpos0 = chYpos;
+	unsigned char i, j;
+	unsigned char chTemp = 0, chYpos0 = chYpos;
 
 	for (i = 0; i < 32; i ++) {
 		chTemp = c_chFont1612[chChar - 0x30][i];
@@ -318,10 +344,10 @@ void ssd1331_draw_1616char(uint8_t chXpos, uint8_t chYpos, uint8_t chChar, uint1
 	}
 }
 
-void ssd1331_draw_3216char(uint8_t chXpos, uint8_t chYpos, uint8_t chChar, uint16_t hwColor)
+void ssd1331_draw_3216char(unsigned char chXpos, unsigned char chYpos, unsigned char chChar, unsigned int hwColor)
 {
-	uint8_t i, j;
-	uint8_t chTemp = 0, chYpos0 = chYpos;
+	unsigned char i, j;
+	unsigned char chTemp = 0, chYpos0 = chYpos;
 
 	for (i = 0; i < 64; i ++) {
 		chTemp = c_chFont3216[chChar - 0x30][i];
@@ -340,9 +366,9 @@ void ssd1331_draw_3216char(uint8_t chXpos, uint8_t chYpos, uint8_t chChar, uint1
 	}
 }
 
-void ssd1331_draw_bitmap(uint8_t chXpos, uint8_t chYpos, const uint8_t *pchBmp, uint8_t chWidth, uint8_t chHeight, uint16_t hwColor)
+void ssd1331_draw_bitmap(unsigned char chXpos, unsigned char chYpos, const unsigned char *pchBmp, unsigned char chWidth, unsigned char chHeight, unsigned int hwColor)
 {
-	uint16_t i, j, byteWidth = (chWidth + 7) / 8;
+	unsigned int i, j, byteWidth = (chWidth + 7) / 8;
 	
     for(j = 0; j < chHeight; j ++){
         for(i = 0; i < chWidth; i ++ ) {
@@ -353,9 +379,9 @@ void ssd1331_draw_bitmap(uint8_t chXpos, uint8_t chYpos, const uint8_t *pchBmp, 
     }
 }
 
-void ssd1331_clear_screen(uint16_t hwColor)  
+void ssd1331_clear_screen(unsigned int hwColor)
 {
-	uint16_t i, j;
+	unsigned int i, j;
 	
 	for(i = 0; i < OLED_HEIGHT; i ++){
 		for(j = 0; j < OLED_WIDTH; j ++){
@@ -410,8 +436,8 @@ void ssd1331_init(void)
     ssd1331_write_byte(DEACTIVE_SCROLLING, SSD1331_CMD);   //disable scrolling
     ssd1331_write_byte(NORMAL_BRIGHTNESS_DISPLAY_ON, SSD1331_CMD);//set display on
 
-//    ssd1331_fill_rect(0, 0, 96, 64, 0x0000);
-    ssd1331_clear_screen(0x0000);
+    ssd1331_fill_rect(0, 0, 96, 64, 0x0000);
+//    ssd1331_clear_screen(0x0000);
 }
 
 

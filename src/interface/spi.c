@@ -1,78 +1,84 @@
-#include "spi.h"
+#include <msp430g2553.h>
+#include "../device/delay.h"
+/*
+ * ---------SPI---------
+ * PORT		TYPE	PIN
+ * SCK		OUT		P1.5
+ * STE		OUT		P1.4
+ * MOSI		OUT		P1.7
+ * MISO		IN		P1.6
+ * ---------------------
+ */
+#define	SOFT_SPI
 
-#ifdef	SOFT_SPI						//Begin of SOFT_SPI
-static uint8_t SPI_DELAY=0;			//=50us
+#ifdef SOFT_SPI
+#define SPI_CS_HIGH			P1OUT |= BIT4
+#define SPI_CS_LOW			P1OUT &=~BIT4
+#define SPI_CLK_HIGH		P1OUT |= BIT5
+#define SPI_CLK_LOW			P1OUT &=~BIT5
+#define SPI_MOSI_HIGH		P1OUT |= BIT7
+#define SPI_MOSI_LOW		P1OUT &=~BIT7
+#define SPI_MISO_IN			P1IN  &  BIT6
 
 void spi_init(void)
 {
-	SPI_PIN_SET;
+	P1DIR |= BIT5;
+	P1DIR |= BIT4;
+	P1DIR |= BIT7;
+	P1DIR &=~BIT6;
 }
 
-void Tx_Char(uint8_t data)
+void spi_transmit_char(unsigned char data)
 {
-	uint8_t i=0;
+	unsigned char i=0;
 	for (i=0; i<8; i++) {
 		SPI_CLK_LOW;
-		delay_us(SPI_DELAY);
 		if ((data<<i) & BIT7)
 			SPI_MOSI_HIGH;
 		else
 			SPI_MOSI_LOW;
-		delay_us(SPI_DELAY);
 		SPI_CLK_HIGH;
-		delay_us(SPI_DELAY);
 	}
 }
 
-uint8_t Rx_Char(void)
+unsigned char spi_receive_char(void)
 {
-	uint8_t i=0;
-	uint8_t Temp=0;
+	unsigned char i=0;
+	unsigned char temp=0;
 	for (i=0; i<8; i++) {
 		SPI_CLK_LOW ;
-		delay_us(SPI_DELAY);
 		SPI_CLK_HIGH;
-		delay_us(SPI_DELAY);
-		Temp = Temp<<1;		//移位，这句需放在前面
+		temp = temp<<1;
 		if(SPI_MISO_IN)
-			Temp |= BIT0;			//置1
+			temp |= BIT0;
 	}
-	return Temp;
+	return temp;
 }
 
-uint8_t spi_txFrame(uint8_t *pBuffer, uint16_t size)
+unsigned char spi_transmit_frame(unsigned char *p_buff, unsigned char num)
 {
-	uint8_t i=0;
-	irq_disable();
-	for (i=0; i<size; i++) {
-		Tx_Char(*pBuffer);
-		pBuffer++;
+	unsigned char i=0;
+	_disable_interrupts();
+	for (i=0; i<num; i++) {
+		spi_transmit_char(*p_buff);
+		p_buff++;
 	}
-	irq_enable();
+	_enable_interrupts();
 	return 1;
 }
 
-uint8_t spi_rxFrame(uint8_t  *pBuffer, uint16_t size)
+unsigned char spi_receive_frame(unsigned char *p_buff, unsigned char num)
 {
-	uint8_t i=0;
-	irq_disable();
-	for (i=0;i<size;i++) {
-		 *pBuffer=Rx_Char();
-		 pBuffer++;
+	unsigned char i=0;
+	_disable_interrupts();
+	for (i=0; i<num; i++) {
+		 *p_buff = spi_receive_char();
+		 p_buff++;
 	}
-	irq_enable();
+	_enable_interrupts();
 	return 1;
 }
 
-void spi_highSpeed()
-{
-	SPI_DELAY=10;
-}
-
-void spi_lowSpeed()
-{
-	SPI_DELAY=50;
-}
 #endif		//End of SOFT_SPI
 
 #ifdef HARD_SPI			//Begin of HRAD_SPI

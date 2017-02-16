@@ -4,27 +4,27 @@
  *  Created on: 2016年10月20日
  *      Author: redchenjs
  */
-#include "senser.h"
+#include <msp430g2553.h>
+#include "../user/record.h"
+#include "../driver/bh1750.h"
 
-BH1750 Senser;
+unsigned int lux_now  = 0x0000;
+unsigned int lux_past = 0xffff;
 
-uint16_t lux_now  = 0x0000;
-uint16_t lux_past = 0xffff;
+unsigned int set_now  = 0x0000;
+unsigned int set_past = 0xffff;
 
-uint16_t set_now  = 0x0000;
-uint16_t set_past = 0xffff;
+unsigned char index_now  = 0x00;
+unsigned char index_past = 0xff;
 
-uint8_t index_now  = 0x00;
-uint8_t index_past = 0xff;
+extern unsigned char status_now;
 
-extern uint8_t status_now;
-
-void senser_getLux(void)
+void senser_get_lux(void)
 {
-	static uint16_t cnt_above = 0;
-	static uint16_t cnt_below = 0;
+	static unsigned int cnt_above = 0;
+	static unsigned int cnt_below = 0;
 
-	Senser.getLux(lux_now);
+	lux_now = bh1750_get_lux();
 
 	if (lux_now >= set_now) {
 		cnt_above++;
@@ -56,9 +56,9 @@ void senser_getLux(void)
 	}
 }
 
-void senser_setLux(uint16_t now)
+void senser_set_lux(unsigned int now)
 {
 	set_now = now;
 
-	record_writeLuxSet();
+	record_write_settings();
 }

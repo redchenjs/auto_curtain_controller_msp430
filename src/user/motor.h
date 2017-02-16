@@ -13,6 +13,6 @@ void motor_close(void);
 
 void motor_init(void);
 
-void motor_set(void);
+void motor_update(void);
 
 #endif /* SRC_MOTOR_H_ */

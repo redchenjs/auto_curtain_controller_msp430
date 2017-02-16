@@ -1,30 +1,30 @@
 /*
  * Flash.c
  * 实际适用于MSP430x2xx系列单片机，包含以下10个常用功能函数：
-(1)初始化。Flash_Init(unsigned char Div,unsigned char Seg )：依据SMCLK频率计算设定Flash的时钟的分频系数，靠Seg段号码确定计划操作的段起始地址。
-(2)整段擦除。Flash_Erase()：段擦除函数。
-(3)读字节。Flash_ReadChar(unsigned int Addr)：读取偏移地址Addr位置1个字节的数据。
-(4)读字。Flash_ReadWord(unsigned int Addr)：读取偏移地址Addr位置1个字的数据。
-(5)读一串字节到RAM数组。Flash_ReadSeg(unsigned int Addr, unsigned int SegSize,char * Array)：读取起始偏移地址为Addr，长度SegSize个字节数据到RAM的Array数组。
-(6)直接写1个字节。Flash_Direct_WriteChar(unsigned int Addr)：直接写偏移地址Addr位置1个字节的数据。
-(7)直接写1个字。Flash_Direct_WriteWord(unsigned int Addr)：直接写偏移地址Addr位置1个字的数据。
-(8)备份后写1字节。Flash_Bak_WriteChar(unsigned int Addr)：先备份段内其他数据，擦写后，在偏移地址Addr位置写1个字节的数据，再还原段内其他数据。（仅限信息flash段，使用RAM备份）
-(9)备份后写1个字。Flash_Bak_WriteWord(unsigned int Addr)：先备份段内其他数据，擦写后，在偏移地址Addr位置写1个字的数据，再还原段内其他数据。（仅限信息flash段，使用RAM备份）。
-(10)读SegA专用函数。Flash_SegA_ReadChar(unsigned int Addr)：读取SegA段偏移地址Addr位置1个字节的数据。
+(1)初始化。flash_init(unsigned char Div,unsigned char Seg )：依据SMCLK频率计算设定Flash的时钟的分频系数，靠Seg段号码确定计划操作的段起始地址。
+(2)整段擦除。flash_erase()：段擦除函数。
+(3)读字节。flash_read_char(unsigned int Addr)：读取偏移地址Addr位置1个字节的数据。
+(4)读字。flash_read_word(unsigned int Addr)：读取偏移地址Addr位置1个字的数据。
+(5)读一串字节到RAM数组。flash_read_seg(unsigned int Addr, unsigned int SegSize,char * Array)：读取起始偏移地址为Addr，长度SegSize个字节数据到RAM的Array数组。
+(6)直接写1个字节。flash_direct_write_char(unsigned int Addr)：直接写偏移地址Addr位置1个字节的数据。
+(7)直接写1个字。flash_direct_write_word(unsigned int Addr)：直接写偏移地址Addr位置1个字的数据。
+(8)备份后写1字节。flash_bak_write_char(unsigned int Addr)：先备份段内其他数据，擦写后，在偏移地址Addr位置写1个字节的数据，再还原段内其他数据。（仅限信息flash段，使用RAM备份）
+(9)备份后写1个字。flash_bak_write_word(unsigned int Addr)：先备份段内其他数据，擦写后，在偏移地址Addr位置写1个字的数据，再还原段内其他数据。（仅限信息flash段，使用RAM备份）。
+(10)读SegA专用函数。flash_seg_a_read_char(unsigned int Addr)：读取SegA段偏移地址Addr位置1个字节的数据。
 说明： 1、块写函数需要在RAM中调用函数指针来使用，本库函数未涉及
            2、其他长字节的数据类型读写需使用结构体，本库函数未涉及
            3、所有函数均针对无符号整形数据，如需使用有符号整形，需修改函数
-           5、对InfoA段单独处理，只有读字节函数Flash_SegA_ReadChar()，不提供擦写函数。
-           6、其他函数的段操作首地址SegAddr被Flash_Init()函数“限定”，不易发生误写
+           5、对InfoA段单独处理，只有读字节函数flash_seg_a_read_char()，不提供擦写函数。
+           6、其他函数的段操作首地址SegAddr被flash_init()函数“限定”，不易发生误写
  *
  *  Created on: 2013-2-18
  *   Author: Administrator
  */
-#include  "../system/config.h"
+#include <msp430g2553.h>
 unsigned int SegAddr=0;						//全局变量
 unsigned int SegPre=0;						//全局变量 当前信息段
 /******************************************************************************************************
-* 名   	 称：Flash_Init()
+* 名   	 称：flash_init()
 * 功  	 能：对Flash时钟进行初始化设置
 * 入口参数：Div：根据SMCLK频率计算的所需分频值，可设定为1-64
 * 					Seg:段号，可设为"0"-"31"或”"A"、"B"、"C"、"D"。
@@ -32,9 +32,9 @@ unsigned int SegPre=0;						//全局变量 当前信息段
 *                   0：配置失败
 * 说   	 明：操作Flash其他函数前，需要调用该初始化函数设置时钟分频和待操作段首地址。
 *                   其他函数中均不出现绝对地址，防止误操作。
-* 范       例： Flash_Init(3,'B' ) 3分频、对Info B段操作
+* 范       例： flash_init(3,'B' ) 3分频、对Info B段操作
  ******************************************************************************************************/
-unsigned char Flash_Init(unsigned char Div,unsigned char Seg )
+unsigned char flash_init(unsigned char Div,unsigned char Seg)
 {
 	//-----设置Flash的时钟和分频，分频为恰好为最低位，直接用Div-1即可-----
 	if(Div<1) Div=1;
@@ -59,14 +59,14 @@ unsigned char Flash_Init(unsigned char Div,unsigned char Seg )
 	return(1);
 }
 /******************************************************************************************************
-* 名       称：Flash_Erase()
-* 功       能：擦除Flash的一个数据块，擦写段由初始化函数 Flash_Init()的SegAddr变量决定
+* 名       称：flash_erase()
+* 功       能：擦除Flash的一个数据块，擦写段由初始化函数 flash_init()的SegAddr变量决定
 * 入口参数：无
 * 出口参数：无
 * 说       明：函数中给出了擦除InfoFlashA段的操作代码（已注释掉了），但不建议初学者使用。
 * 范       例：无
  ******************************************************************************************************/
-void Flash_Erase()
+void flash_erase()
 {
   unsigned char *Ptr_SegAddr;                   			// Segment  pointer
   Ptr_SegAddr = (unsigned char *)SegAddr;  		// Initialize Flash  pointer
@@ -82,19 +82,19 @@ void Flash_Erase()
   //FCTL3 = FWKEY+LOCK+LOCKA;                       // 对InfoFlashA也上锁
 }
 /******************************************************************************************************
-* 名    称：Flash_ReadChar()
+* 名    称：flash_read_char()
 * 功    能：从Flash中读取一个字节
 * 入口参数：Addr:存放数据的偏移地址
 * 出口参数：读回的数据；当偏移溢出时返回0
 * 说       明：无
 * 范       例：无
  ******************************************************************************************************/
-unsigned char Flash_ReadChar (unsigned int Addr)
+unsigned char flash_read_char(unsigned int Addr)
 {
   unsigned char Data=0;
   unsigned int *Ptr_SegAddr,temp=0;                    			// Segment  pointer
   //----- 段范围限定。为了内存管理安全，只允许本段操作-----
-  if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>=64) )
+  if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>=64))
 	  return 0;
   temp =SegAddr+Addr;
   Ptr_SegAddr =(unsigned int *)temp;  		 				// Initialize Flash  pointer
@@ -102,19 +102,19 @@ unsigned char Flash_ReadChar (unsigned int Addr)
   return(Data);
 }
 /******************************************************************************************************
-* 名       称：Flash_ReadWord()
+* 名       称：flash_read_word()
 * 功       能：从FlashROM读回一个整型变量，地址应为偶数
 * 入口参数：Addr:存放数据的偏移地址，仍按字节计算，需为偶数
 * 出口参数：读回的整型变量值  ；当偏移溢出时返回0
 * 说       明：无
 * 范       例：无
  ******************************************************************************************************/
-unsigned int Flash_ReadWord (unsigned int Addr)
+unsigned int flash_read_word(unsigned int Addr)
 {
   unsigned int *Ptr_SegAddr;
   unsigned int temp=0,Data=0;                    // Segment  pointer
   //----- 段范围限定。为了内存管理安全，只允许本段操作-----
-  if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>=64) )
+  if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>=64))
 	  return 0;
   temp = SegAddr+Addr;
     Ptr_SegAddr = (unsigned int *)temp;  					// Initialize Flash pointer
@@ -122,7 +122,7 @@ unsigned int Flash_ReadWord (unsigned int Addr)
   return(Data);
 }
 /******************************************************************************************************
-* 名    称：Flash_ReadSeg()
+* 名    称：flash_read_seg()
 * 功    能：将Flash段内一串数据拷贝到RAM的Array数组
 * 入口参数：Addr：起始偏移地址
 * 					SegSize：数据个数
@@ -131,12 +131,12 @@ unsigned int Flash_ReadWord (unsigned int Addr)
 * 说       明：无
 * 范       例：无
  ******************************************************************************************************/
-char Flash_ReadSeg(unsigned int Addr, unsigned int SegSize,unsigned char * Array)
+char flash_read_seg(unsigned int Addr, unsigned int SegSize,unsigned char * Array)
 {
 	unsigned int i=0,temp=0;
 	unsigned char *Ptr_SegAddr;                    		// Segment  pointer
 	  //----- 段范围限定。为了内存管理安全，只允许本段操作-----
-	if((SegPre<=31&&(Addr+SegSize)>512) ||(SegPre>31&&(Addr+SegSize)>64) )
+	if((SegPre<=31&&(Addr+SegSize)>512) ||(SegPre>31&&(Addr+SegSize)>64))
 	  return 0;
 	for(i=0;i<SegSize;i++)
 	{
@@ -147,20 +147,20 @@ char Flash_ReadSeg(unsigned int Addr, unsigned int SegSize,unsigned char * Array
 	  return 1;
 }
 /******************************************************************************************************
-* 名    称：Flash_Direct_WriteChar()
+* 名    称：flash_direct_write_char()
 * 功    能：强行向Flash中写入一个字节(Char型变量)，而不管是否为空
 * 入口参数：Addr:存放数据的偏移地址
             		Data:待写入的数据
 * 出口参数：返回出错信息 0:偏移溢出 ；1:正常工作
-* 范    例：Flash_Direct_WriteChar(0,123);将常数123写入0单元
-            	 Flash_Direct_WriteChar(1,a);将整型变量a写入1单元
+* 范    例：flash_direct_write_char(0,123);将常数123写入0单元
+            	 flash_direct_write_char(1,a);将整型变量a写入1单元
  ******************************************************************************************************/
-char Flash_Direct_WriteChar (unsigned int Addr,unsigned char Data)
+char flash_direct_write_char(unsigned int Addr,unsigned char Data)
 {
 	unsigned int temp=0;
 	unsigned char *Ptr_SegAddr;                 	// Segment  pointer
 	  //----- 段范围限定。为了内存管理安全，只允许本段操作-----
-	if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>=64) )
+	if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>=64))
 	  return 0;
 	temp = SegAddr+Addr;
 	Ptr_SegAddr = (unsigned char *)temp;  	// Initialize Flash  pointer
@@ -177,20 +177,20 @@ char Flash_Direct_WriteChar (unsigned int Addr,unsigned char Data)
 	 return 1;
 }
 /******************************************************************************************************
-* 名    称：Flash_Direct_WriteWord()
+* 名    称：flash_direct_write_word()
 * 功    能：强行向Flash中写入一个字型变量，而不管存储位置是否事先擦除
 * 入口参数：Addr:存放数据的偏移地址，仍按字节计算，需为偶数
             		Data:待写入的数据
 * 出口参数：返回出错信息 0:偏移溢出 ；1:正常工作
-* 范    例：Flash_Direct_WriteWord(0,123);将常数123写入0单元
-            	 Flash_Direct_WriteWord(2,a);将整型变量a写入2单元
+* 范    例：flash_direct_write_word(0,123);将常数123写入0单元
+            	 flash_direct_write_word(2,a);将整型变量a写入2单元
  ******************************************************************************************************/
-char Flash_Direct_WriteWord (unsigned int Addr,unsigned int Data)
+char flash_direct_write_word(unsigned int Addr,unsigned int Data)
 {
 	unsigned int temp=0;
 	unsigned int *Ptr_SegAddr;                    	// Segment  pointer
 	  //----- 段范围限定。为了内存管理安全，只允许本段操作-----
-	if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>=64) )
+	if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>=64))
 	  return 0;
 	temp=SegAddr+Addr;
 	Ptr_SegAddr = (unsigned int *)temp;  	   	// Initialize Flash  pointer
@@ -207,22 +207,22 @@ char Flash_Direct_WriteWord (unsigned int Addr,unsigned int Data)
 	 return 1;
 }
 /******************************************************************************************************
-* 名    称：Flash_Bak_WriteChar()
+* 名    称：flash_bak_write_char()
 * 功    能：不破坏段内其他数据，向Flash中写入一个字节(Char型变量)
 * 入口参数：Addr:存放数据的地址
             		Data:待写入的数据
 * 出口参数：返回出错信息 0:偏移溢出 ；1:正常工作
-* 范    例：Flash_Bak_WriteChar(0,123);将常数123写入0单元
-            	 Flash_Bak_WriteChar(1,a);将变量a写入1单元
+* 范    例：flash_bak_write_char(0,123);将常数123写入0单元
+            	 flash_bak_write_char(1,a);将变量a写入1单元
  ******************************************************************************************************/
-char Flash_Bak_WriteChar (unsigned int Addr,unsigned char Data)
+char flash_bak_write_char(unsigned int Addr,unsigned char Data)
 {
 	unsigned int temp=0;
 	unsigned char *Ptr_SegAddr;                    	// Segment  pointer
 	unsigned char BackupArray[64];					//开辟64字节的临时RAM备份Seg
 	unsigned char i = 0;
 	  //----- 段范围限定。为了内存管理安全，只允许本段操作-----
-	if((SegPre<=31&&Addr>=512) || (SegPre>31&&Addr>64) )
+	if((SegPre<=31&&Addr>=512) || (SegPre>31&&Addr>64))
 	  return 0;
 	for(i=0;i<64;i++)
 	{
@@ -230,7 +230,7 @@ char Flash_Bak_WriteChar (unsigned int Addr,unsigned char Data)
 	  Ptr_SegAddr = (unsigned char *)temp;  	// Initialize Flash  pointer
 	  BackupArray[i]=*Ptr_SegAddr;					//指针移位方法赋值
 	}
-	Flash_Erase();  												//擦除待操作段
+	flash_erase();  												//擦除待操作段
 	FCTL1 = FWKEY + WRT;                      			// 正常写入（非块写）
 	FCTL3 = FWKEY ;                            					// 解锁
 //	FCTL3 = FWKEY ;                            					// 解锁（含A段）
@@ -259,17 +259,17 @@ char Flash_Bak_WriteChar (unsigned int Addr,unsigned char Data)
 	 return 1;
 }
 /******************************************************************************************************
-* 名       称：Flash_Bak_WriteWord()
+* 名       称：flash_bak_write_word()
 * 功       能：不破坏段内其他数据，向Flash中写入一个字(int型变量)
 * 入口参数：Addr:存放数据的地址，仍然是以字节为单位的偏移地址，需为偶数
             		Data:待写入的数据
 * 出口参数：返回出错信息 0:偏移溢出 ；1:正常工作
 * 说       明：MSP430单片机可以对16位数据直接操作，所以为了加快速度
 *                 函数中均直接对word进行操作。
-* 范       例：Flash_Bak_WriteWord(0,123);将常数123写入0单元
-            	 Flash_Bak_WriteWord(1,a);将变量a写入1单元
+* 范       例：flash_bak_write_word(0,123);将常数123写入0单元
+            	 flash_bak_write_word(1,a);将变量a写入1单元
  ******************************************************************************************************/
-char Flash_Bak_WriteWord(unsigned int Addr,unsigned int Data)
+char flash_bak_write_word(unsigned int Addr,unsigned int Data)
 {
 	unsigned int *Ptr_SegAddr;                    			// Segment  pointer
 	Ptr_SegAddr = (unsigned int *)SegAddr;  	   	// Initialize Flash  pointer
@@ -277,13 +277,13 @@ char Flash_Bak_WriteWord(unsigned int Addr,unsigned int Data)
 	unsigned int BackupArray[32];							//开辟32字(64字节）的临时RAM备份Seg
 	unsigned int i = 0;
 	 //----- 段范围限定。为了内存管理安全，只允许本段操作-----
-	if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>64) )
+	if((SegPre<=31&&Addr>=512) ||(SegPre>31&&Addr>64))
 	return 0;
 	for(i=0;i<32;i++)												//	word型占两个字节
 	{
 	  BackupArray[i]= *(Ptr_SegAddr+i);					//指针移位方法对字赋值
 	}
-	Flash_Erase();  													//擦除待操作段
+	flash_erase();  													//擦除待操作段
 	FCTL1 = FWKEY + WRT;                      				// 正常写入（非块写）
 	FCTL3 = FWKEY;                            						// 解锁
 // FCTL3 = FWKEY+LOCKA;                            		// 解锁	（含A段）
@@ -308,12 +308,12 @@ char Flash_Bak_WriteWord(unsigned int Addr,unsigned int Data)
 	 return 1;
 }
 /******************************************************************************************************
-* 名    称：Flash_SegA_ReadChar()
+* 名    称：flash_seg_a_read_char()
 * 功    能：从InfoA中读取一个字节
 * 入口参数：Addr:存放数据的偏移地址
 * 出口参数：读回的数据;偏移溢出时，返回 0
  ******************************************************************************************************/
-unsigned char Flash_SegA_ReadChar (unsigned int Addr)
+unsigned char flash_seg_a_read_char(unsigned int Addr)
 {
 	unsigned int temp=0;
 	unsigned char Data;

@@ -8,12 +8,10 @@
 #ifndef SRC_USER_DISPLAY_H_
 #define SRC_USER_DISPLAY_H_
 
-#include "../system/config.h"
-
-void display_refreshLux(void);
-void display_refreshSet(void);
-void display_refreshStatus(void);
-void display_refreshProgress(void);
+void display_refresh_lux(void);
+void display_refresh_set(void);
+void display_refresh_status(void);
+void display_refresh_progress(void);
 
 void display_init(void);
 

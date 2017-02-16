@@ -8,9 +8,7 @@
 #ifndef SRC_USER_SENSER_H_
 #define SRC_USER_SENSER_H_
 
-#include "../system/config.h"
-
-void senser_getLux(void);
-void senser_setLux(uint16_t now);
+extern void senser_get_lux(void);
+extern void senser_set_lux(unsigned int now);
 
 #endif /* SRC_USER_SENSER_H_ */

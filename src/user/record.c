@@ -4,67 +4,68 @@
  *  Created on: 2016年10月26日
  *      Author: redchenjs
  */
-#include "../system/config.h"
+#include <msp430g2553.h>
+#include "../device/flash.h"
 
-extern uint8_t status_now;
-extern uint8_t index_now;
+extern unsigned char status_now;
+extern unsigned char index_now;
 
-extern uint16_t set_now;
+extern unsigned int set_now;
 
-void record_writeStatus(void)
+void record_write_status(void)
 {
 	//-----写Flash前DCO时钟一定要重新确认一遍-----
     DCOCTL  = CALDCO_1MHZ;
     BCSCTL1 = CALBC1_1MHZ;
 
-    Flash_Init(3,'B');																// 初始化Flash
+    flash_init(3,'B');																// 初始化Flash
 
-	Flash_Bak_WriteChar(0x00, status_now);
+	flash_bak_write_char(0x00, status_now);
 
 	DCOCTL  = CALDCO_16MHZ;
 	BCSCTL1 = CALBC1_16MHZ;
 }
 
-void record_writeLuxSet(void)
+void record_write_settings(void)
 {
 	//-----写Flash前DCO时钟一定要重新确认一遍-----
     DCOCTL  = CALDCO_1MHZ;
     BCSCTL1 = CALBC1_1MHZ;
 
-    Flash_Init(3,'B');																// 初始化Flash
+    flash_init(3,'B');																// 初始化Flash
 
-	Flash_Bak_WriteWord(0x02, set_now);
+	flash_bak_write_word(0x02, set_now);
 
 	DCOCTL  = CALDCO_16MHZ;
 	BCSCTL1 = CALBC1_16MHZ;
 }
 
-void record_writeAll(void)
+void record_write_all(void)
 {
 	//-----写Flash前DCO时钟一定要重新确认一遍-----
     DCOCTL  = CALDCO_1MHZ;
     BCSCTL1 = CALBC1_1MHZ;
 
-    Flash_Init(3,'B');																// 初始化Flash
-	Flash_Erase();																	// 擦除Info_B
+    flash_init(3,'B');																// 初始化Flash
+	flash_erase();																	// 擦除Info_B
 
-	Flash_Direct_WriteChar(0x00, status_now);
-	Flash_Direct_WriteWord(0x02, set_now);
+	flash_direct_write_char(0x00, status_now);
+	flash_direct_write_word(0x02, set_now);
 
 	DCOCTL  = CALDCO_16MHZ;
 	BCSCTL1 = CALBC1_16MHZ;
 }
 
-void record_readAll(void)
+void record_read_all(void)
 {
 	//-----写Flash前DCO时钟一定要重新确认一遍-----
     DCOCTL  = CALDCO_1MHZ;
     BCSCTL1 = CALBC1_1MHZ;
 
-    Flash_Init(3,'B');																// 初始化Flash
+    flash_init(3,'B');																// 初始化Flash
 
-    status_now = Flash_ReadChar(0x00);
-    set_now    = Flash_ReadWord(0x02);
+    status_now = flash_read_char(0x00);
+    set_now    = flash_read_word(0x02);
 
     if (status_now > 3) status_now = 0;
 

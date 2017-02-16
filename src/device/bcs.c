@@ -4,7 +4,7 @@
  *  Created on: 2016-3-22
  *      Author: redchenjs
  */
-#include "../system/config.h"
+#include <msp430g2553.h>
 
 void bcs_init(void)
 {

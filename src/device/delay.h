@@ -7,9 +7,8 @@
 
 #ifndef SRC_DELAY_H_
 #define SRC_DELAY_H_
-#include "../system/config.h"
 
-void delay_us(uint16_t cycles=1);
-void delay_ms(uint16_t cycles=1);
+extern void delay_us(unsigned int cycles);
+extern void delay_ms(unsigned int cycles);
 
 #endif /* SRC_DELAY_H_ */

@@ -8,10 +8,10 @@
 #ifndef SRC_USER_RECORD_H_
 #define SRC_USER_RECORD_H_
 
-void record_writeStatus(void);
-void record_writeLuxSet(void);
+void record_write_status(void);
+void record_write_settings(void);
 
-void record_writeAll(void);
-void record_readAll(void);
+void record_write_all(void);
+void record_read_all(void);
 
 #endif /* SRC_USER_RECORD_H_ */

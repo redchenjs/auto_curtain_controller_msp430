@@ -7,6 +7,6 @@
 #ifndef BCS_H_
 #define BCS_H_
 
-void bcs_init(void);
+extern void bcs_init(void);
 
 #endif /* BCSPLUS_INIT_H_ */

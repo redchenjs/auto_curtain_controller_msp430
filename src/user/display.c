@@ -4,46 +4,29 @@
  *  Created on: 2016年10月20日
  *      Author: redchenjs
  */
-#include "display.h"
+#include <stdio.h>
+#include "../driver/ssd1331.h"
 
-static bool init_flag=0;
+unsigned char init_flag=0;
 
-extern uint16_t lux_now;
-extern uint16_t lux_past;
+extern unsigned int lux_now;
+extern unsigned int lux_past;
 
-extern uint16_t set_now;
-extern uint16_t set_past;
+extern unsigned int set_now;
+extern unsigned int set_past;
 
-extern uint8_t status_now;
-extern uint8_t status_past;
+extern unsigned char status_now;
+extern unsigned char status_past;
 
-extern uint8_t index_now;
-extern uint8_t index_past;
+extern unsigned char index_now;
+extern unsigned char index_past;
 
-const char disp_mask[7]  = {0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-const char prog_mask[16] = {0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d};
+const char disp_mask[8]  = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0x00};
+const char prog_mask[17] = {0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x2d,0x00};
 
-void display_init(void)
+void display_refresh_lux(void)
 {
-	init_flag = 1;
-
-	ssd1331_display_string(0, 0, "now:", FONT_1206, WHITE);
-	ssd1331_display_string(78, 0, "lux", FONT_1206, WHITE);
-
-	ssd1331_display_string(0, 16, "set:", FONT_1206, WHITE);
-	ssd1331_display_string(78, 16, "lux", FONT_1206, WHITE);
-
-	ssd1331_display_string(0, 32, "status:", FONT_1206, WHITE);
-	display_refreshStatus();
-
-	display_refreshProgress();
-
-	init_flag = 0;
-}
-
-void display_refreshLux(void)
-{
-	static char lux_disp[5];
+	static char lux_disp[6];
 
 	if (lux_now != lux_past) {
 		sprintf(lux_disp, "%5u", lux_now);
@@ -54,9 +37,9 @@ void display_refreshLux(void)
 	lux_past = lux_now;
 }
 
-void display_refreshSet(void)
+void display_refresh_set(void)
 {
-	static char set_disp[5];
+	static char set_disp[6];
 
 	if (set_now != set_past) {
 		sprintf(set_disp, "%5u", set_now);
@@ -67,7 +50,7 @@ void display_refreshSet(void)
 	set_past = set_now;
 }
 
-void display_refreshStatus(void)
+void display_refresh_status(void)
 {
 	if ((status_now != status_past) || init_flag) {
 		ssd1331_display_string(54, 32, disp_mask, FONT_1206, BLACK);
@@ -88,11 +71,9 @@ void display_refreshStatus(void)
 				break;
 		}
 	}
-
-
 }
 
-void display_refreshProgress(void)
+void display_refresh_progress(void)
 {
 	if (init_flag) {
 		switch (status_now) {
@@ -104,7 +85,6 @@ void display_refreshProgress(void)
 			case 3:
 				ssd1331_display_string(0, 48, prog_mask, FONT_1206, GREEN);
 				break;
-
 			default:
 				break;
 		}
@@ -126,4 +106,22 @@ void display_refreshProgress(void)
 	}
 
 	index_past = index_now;
+}
+
+void display_init(void)
+{
+	init_flag = 1;
+
+	ssd1331_display_string(0, 0, "now:", FONT_1206, WHITE);
+	ssd1331_display_string(78, 0, "lux", FONT_1206, WHITE);
+
+	ssd1331_display_string(0, 16, "set:", FONT_1206, WHITE);
+	ssd1331_display_string(78, 16, "lux", FONT_1206, WHITE);
+
+	ssd1331_display_string(0, 32, "status:", FONT_1206, WHITE);
+	display_refresh_status();
+
+	display_refresh_progress();
+
+	init_flag = 0;
 }
