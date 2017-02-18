@@ -1,51 +1,44 @@
+#include "../user/motor.h"
+#include "../user/record.h"
+#include "../driver/stepper.h"
 /*
  * motor.c
  *
  *  Created on: 2016年9月27日
  *      Author: redchenjs
  */
-#include "../user/record.h"
-#include "../user/display.h"
-
-unsigned char status_now  = 0x00;
-unsigned char status_past = 0xff;
-
-extern unsigned char stepper_status;
+unsigned char motor_status_now  = 0x00;
+unsigned char motor_status_past = 0xff;
 
 void motor_init(void)
 {
-//	motor_setSpeed(6000);
+
 }
 
-void motor_open(void)
+void motor_step(int num)
 {
-//	motor_step(300*3*4);
-}
-
-void motor_close(void)
-{
-//	motor_step(-300*3*4);
+	stepper_step(num);
 }
 
 void motor_update(void)
 {
-	if (status_now != status_past) {
-		if (status_now == 2 && status_past == 1)
-			motor_close();
-		else if (status_now == 3 && status_past == 0)
-			motor_open();
-		else
-			record_write_status();
+	if (motor_status_now != motor_status_past) {
+		if (motor_status_now == MOTOR_CLOSING && motor_status_past == MOTOR_OPENED)
+			motor_step(6000);
+		else if (motor_status_now == MOTOR_OPENING && motor_status_past == MOTOR_CLOSED)
+			motor_step(-6000);
+//		else
+//			record_write_status();
 	}
 
-	status_past = status_now;
+	motor_status_past = motor_status_now;
 
-	if (stepper_status) {
-		if (status_now == 2) {
-			status_now = 0;
+	if (stepper_ready) {
+		if (motor_status_now == MOTOR_CLOSING) {
+			motor_status_now = MOTOR_CLOSED;
 		}
-		else if (status_now == 3) {
-			status_now = 1;
+		else if (motor_status_now == MOTOR_OPENING) {
+			motor_status_now = MOTOR_OPENED;
 		}
 	}
 }

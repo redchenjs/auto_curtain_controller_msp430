@@ -1,11 +1,5 @@
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef _SSD1331_H_
-#define _SSD1331_H_
-
-/* Includes ------------------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/                    
+#ifndef SSD1331_H_
+#define SSD1331_H_
 
 #define FONT_1206    12
 #define FONT_1608    16
@@ -23,9 +17,9 @@ enum Color{
     BLUE      = RGB(  0,  0,255), // blue
     CYAN      = RGB(  0,255,255), // cyan
     GREEN     = RGB(  0,255,  0), // green
-    PURPLE    = RGB(160, 32,240) // purple
+    PURPLE    = RGB(160, 32,240)  // purple
 };
-/* Exported functions ------------------------------------------------------- */
+
 extern void ssd1331_draw_point(unsigned char chXpos, unsigned char chYpos, unsigned int hwColor);
 extern void ssd1331_draw_line(unsigned char chXpos0, unsigned char chYpos0, unsigned char chXpos1, unsigned char chYpos1, unsigned int hwColor);
 extern void ssd1331_draw_v_line(unsigned char chXpos, unsigned char chYpos, unsigned char chHeight, unsigned int hwColor);
@@ -44,5 +38,3 @@ extern void ssd1331_clear_screen(unsigned int hwColor);
 extern void ssd1331_init(void);
 
 #endif
-/*-------------------------------END OF FILE-------------------------------*/
-

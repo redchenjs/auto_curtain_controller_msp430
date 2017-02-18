@@ -1,14 +1,14 @@
+#include "../user/motor.h"
+#include "../user/senser.h"
+#include "../user/record.h"
+#include "../user/display.h"
+#include "../interface/i2c.h"
 /*
  * user.c
  *
  *  Created on: 2016年10月21日
  *      Author: redchenjs
  */
-#include "../user/motor.h"
-#include "../user/senser.h"
-#include "../user/record.h"
-#include "../user/display.h"
-
 void user_init(void)
 {
 	record_read_all();

@@ -9,4 +9,4 @@
 
 extern void bcs_init(void);
 
-#endif /* BCSPLUS_INIT_H_ */
+#endif

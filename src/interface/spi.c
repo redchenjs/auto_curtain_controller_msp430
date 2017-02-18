@@ -1,5 +1,4 @@
 #include <msp430g2553.h>
-#include "../device/delay.h"
 /*
  * ---------SPI---------
  * PORT		TYPE	PIN
@@ -12,13 +11,13 @@
 #define	SOFT_SPI
 
 #ifdef SOFT_SPI
-#define SPI_CS_HIGH			P1OUT |= BIT4
-#define SPI_CS_LOW			P1OUT &=~BIT4
-#define SPI_CLK_HIGH		P1OUT |= BIT5
-#define SPI_CLK_LOW			P1OUT &=~BIT5
-#define SPI_MOSI_HIGH		P1OUT |= BIT7
-#define SPI_MOSI_LOW		P1OUT &=~BIT7
-#define SPI_MISO_IN			P1IN  &  BIT6
+#define SPI_CS_HIGH		P1OUT |= BIT4
+#define SPI_CS_LOW		P1OUT &=~BIT4
+#define SPI_CLK_HIGH	P1OUT |= BIT5
+#define SPI_CLK_LOW		P1OUT &=~BIT5
+#define SPI_MOSI_HIGH	P1OUT |= BIT7
+#define SPI_MOSI_LOW	P1OUT &=~BIT7
+#define SPI_MISO_IN		P1IN  &  BIT6
 
 void spi_init(void)
 {

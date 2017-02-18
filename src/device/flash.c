@@ -1,5 +1,6 @@
+#include <msp430g2553.h>
 /*
- * Flash.c
+ * flash.c
  * 实际适用于MSP430x2xx系列单片机，包含以下10个常用功能函数：
 (1)初始化。flash_init(unsigned char Div,unsigned char Seg )：依据SMCLK频率计算设定Flash的时钟的分频系数，靠Seg段号码确定计划操作的段起始地址。
 (2)整段擦除。flash_erase()：段擦除函数。
@@ -20,7 +21,6 @@
  *  Created on: 2013-2-18
  *   Author: Administrator
  */
-#include <msp430g2553.h>
 unsigned int SegAddr=0;						//全局变量
 unsigned int SegPre=0;						//全局变量 当前信息段
 /******************************************************************************************************

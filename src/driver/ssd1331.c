@@ -1,4 +1,3 @@
-/* Includes ------------------------------------------------------------------*/
 #include <msp430g2553.h>
 #include "../system/fonts.h"
 #include "../interface/spi.h"
@@ -27,15 +26,12 @@
 #define SSD1331_CS_CLR()	P1OUT &=~BIT4
 #define SSD1331_WRITE_BYTE(__DATA)	spi_transmit_frame(__DATA, 1)
 
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
 #define SSD1331_CMD                     0
 #define SSD1331_DATA                    1
                  
 #define OLED_WIDTH                      96
 #define OLED_HEIGHT                     64
 
-/* Private macro -------------------------------------------------------------*/
 #define DRAW_LINE                       0x21
 #define DRAW_RECTANGLE                  0x22
 #define COPY_WINDOW                     0x23
@@ -77,10 +73,6 @@
 #define ENABLE_LINEAR_GRAY_SCALE_TABLE  0xB9
 #define SET_PRECHARGE_VOLTAGE           0xBB
 #define SET_V_VOLTAGE                   0xBE
-
-/* Private variables ---------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
 
 static void ssd1331_write_byte(unsigned char chData, unsigned char chCmd)
 {
@@ -218,15 +210,6 @@ void ssd1331_draw_circle(unsigned char chXpos, unsigned char chYpos, unsigned ch
     } while(x <= 0);
 }
 
-/**
-  * @brief Displays one character at the specified position    
-  *         
-  * @param  chXpos: Specifies the X position
-  * @param  chYpos: Specifies the Y position
-  * @param  chSize: 
-  * @param  chMode
-  * @retval 
-**/
 void ssd1331_display_char(unsigned char chXpos, unsigned char chYpos, unsigned char chChr, unsigned char chSize, unsigned int hwColor)
 {      	
 	unsigned char i, j, chTemp;
@@ -290,16 +273,6 @@ void ssd1331_display_num(unsigned char chXpos, unsigned char chYpos, unsigned lo
 	}
 } 
 
-
-/**
-  * @brief  Displays a string on the screen
-  *         
-  * @param  chXpos: Specifies the X position
-  * @param  chYpos: Specifies the Y position
-  * @param  pchString: Pointer to a string to display on the screen 
-  *         
-  * @retval  None
-**/
 void ssd1331_display_string(unsigned char chXpos, unsigned char chYpos, const char *pchString, unsigned char chSize, unsigned int hwColor)
 {
 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
@@ -436,8 +409,8 @@ void ssd1331_init(void)
     ssd1331_write_byte(DEACTIVE_SCROLLING, SSD1331_CMD);   //disable scrolling
     ssd1331_write_byte(NORMAL_BRIGHTNESS_DISPLAY_ON, SSD1331_CMD);//set display on
 
-    ssd1331_fill_rect(0, 0, 96, 64, 0x0000);
-//    ssd1331_clear_screen(0x0000);
+//    ssd1331_fill_rect(0, 0, 96, 64, 0x0000);
+    ssd1331_clear_screen(0x0000);
 }
 
 

@@ -4,7 +4,6 @@
  *  Created on: 2013-2-20
  *      Author: Administrator
  */
-
 #ifndef FLASH_H_
 #define FLASH_H_
 
@@ -19,4 +18,4 @@ extern char flash_bak_write_char(unsigned int Addr,unsigned char Data);
 extern char flash_bak_write_word(unsigned int Addr,unsigned int Data);
 extern unsigned char flash_seg_a_read_char(unsigned int Addr);
 
-#endif /* FLASH_H_ */
+#endif

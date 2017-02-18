@@ -4,15 +4,19 @@
  *  Created on: 2016年9月27日
  *      Author: redchenjs
  */
+#ifndef MOTOR_H_
+#define MOTOR_H_
 
-#ifndef SRC_MOTOR_H_
-#define SRC_MOTOR_H_
+#define MOTOR_CLOSED 0x0
+#define MOTOR_OPENED 0x1
+#define MOTOR_CLOSING 0x2
+#define MOTOR_OPENING 0x3
 
-void motor_open(void);
-void motor_close(void);
+extern unsigned char motor_status_now;
+extern unsigned char motor_status_past;
 
-void motor_init(void);
+extern void motor_init(void);
+extern void motor_step(int num);
+extern void motor_update(void);
 
-void motor_update(void);
-
-#endif /* SRC_MOTOR_H_ */
+#endif
