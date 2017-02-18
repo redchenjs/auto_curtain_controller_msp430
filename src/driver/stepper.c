@@ -1,13 +1,39 @@
 #include <msp430g2553.h>
+#include "../driver/stepper.h"
 
 unsigned char stepper_ready = 0;
 unsigned int stepper_location = 0;
 
-static unsigned int steps_left = 0;
-static unsigned char stepper_direction = 1;
+static unsigned int location_set = 0;
 
-const static unsigned int max_of_steps = 6400;
 const static unsigned char stepper_mask[4] = {0x03, 0x06, 0x0c, 0x09};
+
+void stepper_step(unsigned int steps_to_move, unsigned char direction)
+{
+	const static unsigned int min_of_steps = 0;
+	const static unsigned int max_of_steps = 6400;
+
+	if (direction == FORWARD) {
+		if (steps_to_move + location_set > max_of_steps) {
+			location_set = max_of_steps;
+		}
+		else {
+			location_set += steps_to_move;
+		}
+	}
+	else {
+		if (steps_to_move > location_set) {
+			location_set = min_of_steps;
+		}
+		else {
+			location_set -= steps_to_move;
+		}
+	}
+
+	stepper_ready = 0;
+
+	TA0CTL |= MC_1;
+}
 
 void stepper_init(void)
 {
@@ -21,37 +47,16 @@ void stepper_init(void)
 	stepper_ready = 1;
 }
 
-void stepper_step(int steps_to_move)
-{
-//	stepper_location =
-	steps_left = abs(steps_to_move);
-
-	if (steps_to_move > 0) {stepper_direction = 1;}
-	if (steps_to_move < 0) {stepper_direction = 0;}
-
-	stepper_ready = 0;
-
-	TA0CTL |= MC_1;
-}
-
 #pragma vector = TIMER0_A0_VECTOR
 __interrupt void stepper_timer_isr(void)
 {
-	if (steps_left > 0) {
-		if (stepper_direction == 1) {
+	if (stepper_location != location_set) {
+		if (stepper_location < location_set) {
 			stepper_location++;
-			if (stepper_location == max_of_steps) {
-				steps_left = 0;
-			}
 		}
 		else {
 			stepper_location--;
-			if (stepper_location == 0) {
-				steps_left = 0;
-			}
 		}
-		steps_left--;
-
 		P2OUT = stepper_mask[stepper_location % 4];
 	}
 	else {

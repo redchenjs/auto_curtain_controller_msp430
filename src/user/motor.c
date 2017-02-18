@@ -15,18 +15,13 @@ void motor_init(void)
 
 }
 
-void motor_step(int num)
-{
-	stepper_step(num);
-}
-
 void motor_update(void)
 {
 	if (motor_status_now != motor_status_past) {
-		if (motor_status_now == MOTOR_CLOSING && motor_status_past == MOTOR_OPENED)
-			motor_step(6000);
-		else if (motor_status_now == MOTOR_OPENING && motor_status_past == MOTOR_CLOSED)
-			motor_step(-6000);
+		if (motor_status_now == MOTOR_CLOSING)
+			stepper_step(2000, FORWARD);
+		else if (motor_status_now == MOTOR_OPENING)
+			stepper_step(2000, BACKWARD);
 //		else
 //			record_write_status();
 	}
