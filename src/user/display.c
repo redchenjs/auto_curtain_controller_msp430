@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "../user/motor.h"
 #include "../user/senser.h"
+#include "../system/fonts.h"
 #include "../driver/ssd1331.h"
 /*
  * display.c
@@ -8,6 +9,7 @@
  *  Created on: 2016年10月20日
  *      Author: redchenjs
  */
+
 static unsigned char init_flag = 0;
 
 unsigned char display_index_now  = 0x00;
@@ -114,6 +116,8 @@ void display_init(void)
 	display_refresh_status();
 
 	display_refresh_progress();
+
+	ssd1331_draw_bitmap(42, 35, &c_chBluetooth88[0], 8, 8, BLUE);
 
 	init_flag = 0;
 }

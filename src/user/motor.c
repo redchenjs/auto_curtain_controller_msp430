@@ -7,13 +7,9 @@
  *  Created on: 2016年9月27日
  *      Author: redchenjs
  */
+
 unsigned char motor_status_now  = 0x00;
 unsigned char motor_status_past = 0xff;
-
-void motor_init(void)
-{
-
-}
 
 void motor_update(void)
 {
@@ -36,4 +32,9 @@ void motor_update(void)
 			motor_status_now = MOTOR_OPENED;
 		}
 	}
+}
+
+void motor_init(void)
+{
+
 }

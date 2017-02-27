@@ -9,6 +9,7 @@
  *  Created on: 2016年10月21日
  *      Author: redchenjs
  */
+
 void user_init(void)
 {
 	record_read_all();

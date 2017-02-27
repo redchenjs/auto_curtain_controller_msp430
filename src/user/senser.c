@@ -9,6 +9,7 @@
  *  Created on: 2016年10月20日
  *      Author: redchenjs
  */
+
 unsigned int senser_lux_now  = 0x0000;
 unsigned int senser_lux_past = 0xffff;
 

@@ -5,6 +5,7 @@
  *  Created on: 2016年10月20日
  *      Author: redchenjs
  */
+
 void wdt_init(void)
 {
 	WDTCTL = WDT_MDLY_8;
@@ -18,6 +19,6 @@ __interrupt void WDT_ISR(void)
 
 	if (cnt++ > 400) {
 		cnt = 0;
-		__bic_SR_register_on_exit(LPM3_bits);
+		__bic_SR_register_on_exit(LPM0_bits);
 	}
 }

@@ -114,7 +114,7 @@ unsigned char i2c_receive_char(unsigned char ack)
 unsigned char i2c_transmit_frame(unsigned char slave_addr, unsigned char *p_buff, unsigned char num)
 {
 	unsigned char i=0;
-	_disable_interrupts();
+	__disable_interrupt();
 	i2c_start();
 	i2c_transmit_char(slave_addr<<1);		//先发送器件地址和写标志
 	for (i=num; i>0; i--) {
@@ -122,14 +122,14 @@ unsigned char i2c_transmit_frame(unsigned char slave_addr, unsigned char *p_buff
 		p_buff++;
 	}
 	i2c_stop();
-	_enable_interrupts();
+	__enable_interrupt();
 	return 1;
 }
 
 unsigned char i2c_receive_frame(unsigned char slave_addr, unsigned char *p_buff, unsigned char num)
 {
 	unsigned char i=0;
-	_disable_interrupts();
+	__disable_interrupt();
 	i2c_start();
 	i2c_transmit_char((slave_addr<<1) + 0x01);		//先发送器件地址和读标志
 	for (i=num; i>0; i--) {
@@ -137,6 +137,6 @@ unsigned char i2c_receive_frame(unsigned char slave_addr, unsigned char *p_buff,
 		p_buff++;
 	}
 	i2c_stop();
-	_enable_interrupts();
+	__enable_interrupt();
 	return 1;
 }

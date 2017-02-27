@@ -6,6 +6,7 @@
  *  Created on: 2016年10月20日
  *      Author: redchenjs
  */
+
 unsigned int bh1750_get_lux(void)
 {
 	unsigned char temp[2];

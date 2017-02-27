@@ -9,6 +9,7 @@
  *  Created on: 2016年10月26日
  *      Author: redchenjs
  */
+
 void record_write_status(void)
 {
 	//-----写Flash前DCO时钟一定要重新确认一遍-----
