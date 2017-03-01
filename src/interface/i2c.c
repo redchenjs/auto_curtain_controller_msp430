@@ -1,4 +1,4 @@
-#include <msp430g2553.h>
+#include <msp430.h>
 /*
  * ---------I2C---------
  * PORT		TYPE	PIN
@@ -6,11 +6,17 @@
  * SDA		INOUT	P3.1
  * ---------------------
  */
-#define I2C_SCL_HIGH	P3DIR &=~BIT0
-#define I2C_SCL_LOW		P3DIR |= BIT0
-#define I2C_SDA_HIGH	P3DIR &=~BIT1
-#define I2C_SDA_LOW		P3DIR |= BIT1
-#define I2C_SDA_IN		P3IN  &  BIT1
+#define I2C_SET_PIN()   {\
+                            P3DIR &=~BIT0;\
+                            P3OUT &=~BIT0;\
+                            P3DIR &=~BIT1;\
+                            P3OUT &=~BIT1;\
+                         }
+#define I2C_SCL_SET()	P3DIR &=~BIT0
+#define I2C_SCL_CLR()	P3DIR |= BIT0
+#define I2C_SDA_SET()	P3DIR &=~BIT1
+#define I2C_SDA_CLR()	P3DIR |= BIT1
+#define I2C_SDA_IN()	P3IN  &  BIT1
 
 #define F_CPU 16000000
 
@@ -21,56 +27,53 @@ static inline void delay_us(void)
 
 void i2c_init(void)
 {
-	P3DIR &=~BIT0;
-	P3OUT &=~BIT0;
-	P3DIR &=~BIT1;
-	P3OUT &=~BIT1;
+    I2C_SET_PIN();
 }
 
 void i2c_start(void)
 {
-	I2C_SDA_HIGH;
+	I2C_SDA_SET();
 	delay_us();
-	I2C_SCL_HIGH;
+	I2C_SCL_SET();
 	delay_us();
-	I2C_SDA_LOW;
+	I2C_SDA_CLR();
 	delay_us();
-	I2C_SCL_LOW;
+	I2C_SCL_CLR();
 }
 
 void i2c_stop(void)
 {
-	I2C_SDA_LOW;
+	I2C_SDA_CLR();
 	delay_us();
-	I2C_SCL_HIGH;
+	I2C_SCL_SET();
 	delay_us();
-	I2C_SDA_HIGH;
+	I2C_SDA_SET();
 }
 
 void i2c_transmit_ack(unsigned char ack)
 {
 	if (ack) {
-		I2C_SDA_LOW;
+		I2C_SDA_CLR();
 	}
 	else {
-		I2C_SDA_HIGH;
+		I2C_SDA_SET();
 	}
 	delay_us();
-	I2C_SCL_HIGH;
+	I2C_SCL_SET();
 	delay_us();
-	I2C_SCL_LOW;
+	I2C_SCL_CLR();
 }
 
 unsigned char i2c_receive_ack(void)
 {
 	unsigned char temp;
 
-	I2C_SDA_HIGH;
+	I2C_SDA_SET();
 	delay_us();
-	I2C_SCL_HIGH;
-	temp = I2C_SDA_IN;
+	I2C_SCL_SET();
+	temp = I2C_SDA_IN();
 	delay_us();
-	I2C_SCL_LOW;
+	I2C_SCL_CLR();
 
 	return temp;
 }
@@ -80,16 +83,16 @@ void i2c_transmit_char(unsigned char data)
 	unsigned char i=0;
 	for (i=8; i>0; i--) {
 		if (data & BIT7) {
-			I2C_SDA_HIGH;
+			I2C_SDA_SET();
 		}
 		else {
-			I2C_SDA_LOW;
+			I2C_SDA_CLR();
 		}
 		data <<= 1;
 		delay_us();
-		I2C_SCL_HIGH;
+		I2C_SCL_SET();
 		delay_us();
-		I2C_SCL_LOW;
+		I2C_SCL_CLR();
 	}
 	i2c_receive_ack();
 }
@@ -98,14 +101,14 @@ unsigned char i2c_receive_char(unsigned char ack)
 {
 	unsigned char i=0;
 	unsigned char temp=0;
-	I2C_SDA_HIGH;
+	I2C_SDA_SET();
 	for (i=8; i>0; i--) {
 		delay_us();
-		I2C_SCL_HIGH;
+		I2C_SCL_SET();
 		temp = temp<<1;
-		if (I2C_SDA_IN) temp |= BIT0;
+		if (I2C_SDA_IN()) temp |= BIT0;
 		delay_us();
-		I2C_SCL_LOW;
+		I2C_SCL_CLR();
 	}
 	i2c_transmit_ack(ack);
 	return temp;

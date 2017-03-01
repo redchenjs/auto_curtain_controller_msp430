@@ -9,7 +9,6 @@
  *  Created on: 2016年10月20日
  *      Author: redchenjs
  */
-
 static unsigned char init_flag = 0;
 
 unsigned char display_index_now  = 0x00;
@@ -69,19 +68,19 @@ void display_refresh_status(void)
 
 void display_refresh_progress(void)
 {
-	if (init_flag) {
-		switch (motor_status_now) {
-			case 0:
-			case 2:
-				ssd1331_display_string(0, 48, prog_mask, FONT_1206, RED);
-				break;
-			case 1:
-			case 3:
-				ssd1331_display_string(0, 48, prog_mask, FONT_1206, GREEN);
-				break;
-			default:
-				break;
-		}
+    if (init_flag) {
+        switch (motor_status_now) {
+            case 0:
+            case 2:
+                ssd1331_display_string(0, 48, prog_mask, FONT_1206, RED);
+                break;
+            case 1:
+            case 3:
+                ssd1331_display_string(0, 48, prog_mask, FONT_1206, GREEN);
+                break;
+            default:
+                break;
+        }
 	}
 
 	if (display_index_now != display_index_past) {
@@ -108,16 +107,15 @@ void display_init(void)
 
 	ssd1331_display_string(0, 0, "now:", FONT_1206, WHITE);
 	ssd1331_display_string(78, 0, "lux", FONT_1206, WHITE);
-
 	ssd1331_display_string(0, 16, "set:", FONT_1206, WHITE);
 	ssd1331_display_string(78, 16, "lux", FONT_1206, WHITE);
-
 	ssd1331_display_string(0, 32, "status:", FONT_1206, WHITE);
+
 	display_refresh_status();
 
 	display_refresh_progress();
 
-	ssd1331_draw_bitmap(42, 35, &c_chBluetooth88[0], 8, 8, BLUE);
+//	ssd1331_draw_bitmap(42, 35, &c_chBluetooth88[0], 8, 8, BLUE);
 
 	init_flag = 0;
 }

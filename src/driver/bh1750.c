@@ -6,6 +6,7 @@
  *  Created on: 2016年10月20日
  *      Author: redchenjs
  */
+#define BH1750_ADDRESS 0x23
 
 unsigned int bh1750_get_lux(void)
 {

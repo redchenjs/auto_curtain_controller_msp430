@@ -1,22 +1,22 @@
-#include <msp430g2553.h>
+#include <msp430.h>
+#include "ssd1331.h"
 #include "../system/fonts.h"
 #include "../interface/spi.h"
-#include "../driver/ssd1331.h"
 /*
- * --------SSD1331------
+ * --------SSD1331--------
  * PORT		TYPE	PIN
  * RES		OUT		P3.6
  * DC		OUT		P3.7
  * CS		OUT		P1.4
- * SCK		OUT		SPI
- * MOSI		OUT		SPI
- * ---------------------
+ * SCK		OUT		P1.5(SPI)
+ * MOSI		OUT		P1.7(SPI)
+ * -----------------------
  */
 #define abs(x) ((x)>0?(x):-(x))
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
 
-#define SSD1331_PIN_SET		P3DIR |= BIT6; P3DIR |= BIT7; P1DIR |= BIT4
+#define SSD1331_PIN_SET()	P3DIR |= BIT6; P3DIR |= BIT7; P1DIR |= BIT4
 
 #define SSD1331_RES_SET()	P3OUT |= BIT6
 #define SSD1331_RES_CLR()	P3OUT &=~BIT6
@@ -143,7 +143,7 @@ void ssd1331_draw_v_line(unsigned char chXpos, unsigned char chYpos, unsigned ch
 		return;
 	}
 	
-    for (i = chYpos; i < y1; i ++) {
+    for (i = chYpos; i < y1; i++) {
         ssd1331_draw_point(chXpos, i, hwColor);
     }
 }
@@ -156,7 +156,7 @@ void ssd1331_draw_h_line(unsigned char chXpos, unsigned char chYpos, unsigned ch
 		return;
 	}
 	
-    for (i = chXpos; i < x1; i ++) {
+    for (i = chXpos; i < x1; i++) {
         ssd1331_draw_point(i, chYpos, hwColor);
     }
 }
@@ -181,8 +181,8 @@ void ssd1331_fill_rect(unsigned char chXpos, unsigned char chYpos, unsigned char
 		return;
 	}
 	
-	for(i = 0; i < chHeight; i ++){
-		for(j = 0; j < chWidth; j ++){
+	for(i = 0; i < chHeight; i++){
+		for(j = 0; j < chWidth; j++){
 			ssd1331_draw_point(chXpos + j, chYpos + i, hwColor);
 		}
 	}
@@ -203,10 +203,10 @@ void ssd1331_draw_circle(unsigned char chXpos, unsigned char chYpos, unsigned ch
         ssd1331_draw_point(chXpos - x, chYpos - y, hwColor);
         e2 = err;
         if (e2 <= y) {
-            err += ++ y * 2 + 1;
+            err += ++y * 2 + 1;
             if(-x == y && e2 <= x) e2 = 0;
         }
-        if(e2 > x) err += ++ x * 2 + 1;
+        if(e2 > x) err += ++x * 2 + 1;
     } while(x <= 0);
 }
 
@@ -219,22 +219,22 @@ void ssd1331_display_char(unsigned char chXpos, unsigned char chYpos, unsigned c
 		return;
 	}
 					   
-    for (i = 0; i < chSize; i ++) {   
+    for (i = 0; i < chSize; i++) {
 		if (FONT_1206 == chSize) {
 			chTemp = c_chFont1206[chChr - 0x20][i];  
 		} else if (FONT_1608 == chSize) { 
 			chTemp = c_chFont1608[chChr - 0x20][i];
 		}
 		
-        for (j = 0; j < 8; j ++) {
+        for (j = 0; j < 8; j++) {
     		if (chTemp & 0x80) {
 				ssd1331_draw_point(chXpos, chYpos, hwColor);
     		}			
 			chTemp <<= 1;
-			chYpos ++;
+			chYpos++;
 			if ((chYpos - chYpos0) == chSize) {
 				chYpos = chYpos0;
-				chXpos ++;
+				chXpos++;
 				break;
 			}
 		}  	 
@@ -259,7 +259,7 @@ void ssd1331_display_num(unsigned char chXpos, unsigned char chYpos, unsigned lo
 		return;
 	}
 	
-	for(i = 0; i < chLen; i ++) {
+	for(i = 0; i < chLen; i++) {
 		chTemp = (chNum / _pow(10, chLen - i - 1)) % 10;
 		if(chShow == 0 && i < (chLen - 1)) {
 			if(chTemp == 0) {
@@ -291,7 +291,7 @@ void ssd1331_display_string(unsigned char chXpos, unsigned char chYpos, const ch
 		
         ssd1331_display_char(chXpos, chYpos, *pchString, chSize, hwColor);
         chXpos += chSize / 2;
-        pchString ++;
+        pchString++;
     } 
 }
 
@@ -300,17 +300,17 @@ void ssd1331_draw_1616char(unsigned char chXpos, unsigned char chYpos, unsigned 
 	unsigned char i, j;
 	unsigned char chTemp = 0, chYpos0 = chYpos;
 
-	for (i = 0; i < 32; i ++) {
+	for (i = 0; i < 32; i++) {
 		chTemp = c_chFont1612[chChar - 0x30][i];
-		for (j = 0; j < 8; j ++) {
+		for (j = 0; j < 8; j++) {
 			if (chTemp & 0x80) {
 				ssd1331_draw_point(chXpos, chYpos, hwColor);
     		}
 			chTemp <<= 1;
-			chYpos ++;
+			chYpos++;
 			if ((chYpos - chYpos0) == 16) {
 				chYpos = chYpos0;
-				chXpos ++;
+				chXpos++;
 				break;
 			}
 		}
@@ -322,17 +322,17 @@ void ssd1331_draw_3216char(unsigned char chXpos, unsigned char chYpos, unsigned 
 	unsigned char i, j;
 	unsigned char chTemp = 0, chYpos0 = chYpos;
 
-	for (i = 0; i < 64; i ++) {
+	for (i = 0; i < 64; i++) {
 		chTemp = c_chFont3216[chChar - 0x30][i];
-		for (j = 0; j < 8; j ++) {
+		for (j = 0; j < 8; j++) {
 			if (chTemp & 0x80) {
 				ssd1331_draw_point(chXpos, chYpos, hwColor);
     		}
 			chTemp <<= 1;
-			chYpos ++;
+			chYpos++;
 			if ((chYpos - chYpos0) == 32) {
 				chYpos = chYpos0;
-				chXpos ++;
+				chXpos++;
 				break;
 			}
 		}
@@ -343,8 +343,8 @@ void ssd1331_draw_bitmap(unsigned char chXpos, unsigned char chYpos, const unsig
 {
 	unsigned int i, j, byteWidth = (chWidth + 7) / 8;
 	
-    for(j = 0; j < chHeight; j ++){
-        for(i = 0; i < chWidth; i ++ ) {
+    for(j = 0; j < chHeight; j++){
+        for(i = 0; i < chWidth; i++) {
             if(*(pchBmp + j * byteWidth + i / 8) & (128 >> (i & 7))) {
                 ssd1331_draw_point(chXpos + i, chYpos + j, hwColor);
             }
@@ -356,8 +356,8 @@ void ssd1331_clear_screen(unsigned int hwColor)
 {
 	unsigned int i, j;
 	
-	for(i = 0; i < OLED_HEIGHT; i ++){
-		for(j = 0; j < OLED_WIDTH; j ++){
+	for(i = 0; i < OLED_HEIGHT; i++){
+		for(j = 0; j < OLED_WIDTH; j++){
 			ssd1331_draw_point(j, i, hwColor);
 		}
 	}
@@ -366,7 +366,7 @@ void ssd1331_clear_screen(unsigned int hwColor)
 
 void ssd1331_init(void)
 {
-	SSD1331_PIN_SET;
+	SSD1331_PIN_SET();
 	SSD1331_RES_SET();  //RES set
 	SSD1331_CS_SET();
 	
@@ -412,7 +412,3 @@ void ssd1331_init(void)
 //    ssd1331_fill_rect(0, 0, 96, 64, 0x0000);
     ssd1331_clear_screen(0x0000);
 }
-
-
-/*-------------------------------END OF FILE-------------------------------*/
-

@@ -8,7 +8,6 @@
 #ifndef BH1750_H
 #define BH1750_H
 
-#define BH1750_ADDRESS 0x23
 #define BH1750_ONE_TIME_H_RESOLUTION_MODE 0x20
 //One Time H-Resolution Mode:
 //Resolution = 1 lux

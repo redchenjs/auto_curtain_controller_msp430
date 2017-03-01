@@ -82,6 +82,14 @@ unsigned char spi_receive_frame(unsigned char *p_buff, unsigned char num)
 
 #ifdef HARD_SPI			//Begin of HRAD_SPI
 
+#define SPI_SET_PIN()   {\
+                            P1SEL |= BIT5 + BIT6 + BIT7;\
+                            P1SEL2|= BIT5 + BIT6 + BIT7;\
+                            P1DIR |= BIT5 + BIT7;\
+                            P1REN |= BIT6;\
+                            P1OUT |= BIT6;\
+                         }
+
 unsigned char *spi_tx_buff;
 unsigned char *spi_rx_buff;
 
@@ -90,12 +98,7 @@ unsigned char spi_rx_num = 0;
 
 void spi_init(void)
 {
-    P1SEL |= BIT5 + BIT6 + BIT7;
-    P1SEL2|= BIT5 + BIT6 + BIT7;
-    P1DIR |= BIT5 + BIT7;
-
-    P1REN |= BIT6;
-    P1OUT |= BIT6;
+    SPI_SET_PIN();
 
     UCB0CTL1 |= UCSWRST;
 

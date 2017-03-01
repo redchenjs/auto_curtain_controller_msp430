@@ -1,6 +1,6 @@
 #include <msp430g2553.h>
-#include "../system/init.h"
-#include "../system/user.h"
+#include "system/init.h"
+#include "system/user.h"
 /*
  * main.c
  */
