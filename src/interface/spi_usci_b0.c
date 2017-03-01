@@ -1,4 +1,4 @@
-#include <msp430g2553.h>
+#include <msp430.h>
 /*
  * ---------SPI---------
  * PORT		TYPE	PIN
@@ -8,80 +8,6 @@
  * MISO		IN		P1.6
  * ---------------------
  */
-#define	HARD_SPI
-
-#ifdef SOFT_SPI
-#define SPI_CS_HIGH		P1OUT |= BIT4
-#define SPI_CS_LOW		P1OUT &=~BIT4
-#define SPI_CLK_HIGH	P1OUT |= BIT5
-#define SPI_CLK_LOW		P1OUT &=~BIT5
-#define SPI_MOSI_HIGH	P1OUT |= BIT7
-#define SPI_MOSI_LOW	P1OUT &=~BIT7
-#define SPI_MISO_IN		P1IN  &  BIT6
-
-void spi_init(void)
-{
-	P1DIR |= BIT5;
-	P1DIR |= BIT4;
-	P1DIR |= BIT7;
-	P1DIR &=~BIT6;
-}
-
-void spi_transmit_char(unsigned char data)
-{
-	unsigned char i=0;
-	for (i=0; i<8; i++) {
-		SPI_CLK_LOW;
-		if ((data<<i) & BIT7)
-			SPI_MOSI_HIGH;
-		else
-			SPI_MOSI_LOW;
-		SPI_CLK_HIGH;
-	}
-}
-
-unsigned char spi_receive_char(void)
-{
-	unsigned char i=0;
-	unsigned char temp=0;
-	for (i=0; i<8; i++) {
-		SPI_CLK_LOW ;
-		SPI_CLK_HIGH;
-		temp = temp<<1;
-		if(SPI_MISO_IN)
-			temp |= BIT0;
-	}
-	return temp;
-}
-
-unsigned char spi_transmit_frame(unsigned char *p_buff, unsigned char num)
-{
-	unsigned char i=0;
-	_disable_interrupts();
-	for (i=0; i<num; i++) {
-		spi_transmit_char(*p_buff);
-		p_buff++;
-	}
-	_enable_interrupts();
-	return 1;
-}
-
-unsigned char spi_receive_frame(unsigned char *p_buff, unsigned char num)
-{
-	unsigned char i=0;
-	_disable_interrupts();
-	for (i=0; i<num; i++) {
-		 *p_buff = spi_receive_char();
-		 p_buff++;
-	}
-	_enable_interrupts();
-	return 1;
-}
-
-#endif		//End of SOFT_SPI
-
-#ifdef HARD_SPI			//Begin of HRAD_SPI
-
 #define SPI_SET_PIN()   {\
                             P1SEL |= BIT5 + BIT6 + BIT7;\
                             P1SEL2|= BIT5 + BIT6 + BIT7;\
@@ -169,5 +95,3 @@ __interrupt void usciab0_rx_isr(void)
 	}
 	IFG2 &=~UCB0TXIFG;
 }
-
-#endif

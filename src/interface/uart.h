@@ -10,4 +10,6 @@
 
 extern void uart_init(void);
 
+extern unsigned char uart_transmit_frame(unsigned char *p_buff, unsigned char num);
+
 #endif /* SRC_INTERFACE_UART_H_ */
