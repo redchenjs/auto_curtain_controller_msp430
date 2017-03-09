@@ -2,25 +2,22 @@
 /*
  * ---------SPI---------
  * PORT		TYPE	PIN
- * SCK		OUT		P1.5
- * STE		OUT		P1.4
  * MOSI		OUT		P1.7
  * MISO		IN		P1.6
+ * SCK      OUT     P1.5
  * ---------------------
  */
 #define SPI_SET_PIN()   {\
                             P1SEL |= BIT5 + BIT6 + BIT7;\
                             P1SEL2|= BIT5 + BIT6 + BIT7;\
                             P1DIR |= BIT5 + BIT7;\
-                            P1REN |= BIT6;\
-                            P1OUT |= BIT6;\
                          }
 
-unsigned char *spi_tx_buff;
-unsigned char *spi_rx_buff;
+static unsigned char *spi_tx_buff;
+static unsigned char *spi_rx_buff;
 
-unsigned char spi_tx_num = 0;
-unsigned char spi_rx_num = 0;
+static unsigned char spi_tx_num = 0;
+static unsigned char spi_rx_num = 0;
 
 void spi_init(void)
 {
@@ -28,9 +25,9 @@ void spi_init(void)
 
     UCB0CTL1 |= UCSWRST;
 
-    UCB0CTL0 = UCCKPL + UCMSB + UCMST + UCMODE_0 + UCSYNC;
+    UCB0CTL0 = UCMST + UCSYNC + UCCKPL + UCMSB;
     UCB0CTL1 = UCSWRST + UCSSEL_2;
-    UCB0BR0  = 0;
+    UCB0BR0  = 1;
     UCB0BR1  = 0;
 
     UCB0CTL1 &=~UCSWRST;
@@ -41,6 +38,7 @@ void spi_init(void)
 unsigned char spi_transmit_frame(unsigned char *p_buff, unsigned char num)
 {
 	if (num == 0) return 1;
+    if (UCA0STAT & UCBUSY) return 0;
 	__disable_interrupt();
 	spi_tx_buff = p_buff;
 	spi_tx_num  = num - 1;
@@ -55,6 +53,7 @@ unsigned char spi_transmit_frame(unsigned char *p_buff, unsigned char num)
 unsigned char spi_receive_frame(unsigned char *p_buff, unsigned char num)
 {
 	if (num == 0) return 1;
+    if (UCA0STAT & UCBUSY) return 0;
 	__disable_interrupt();
     spi_rx_buff = p_buff;
     spi_rx_num  = num - 1;
@@ -67,7 +66,7 @@ unsigned char spi_receive_frame(unsigned char *p_buff, unsigned char num)
 }
 
 #pragma vector=USCIAB0TX_VECTOR
-__interrupt void usciab0_tx_isr(void)
+__interrupt void USCIAB0TX_ISR(void)
 {
 	UCB0RXBUF;
 	if (spi_tx_num != 0) {
@@ -82,7 +81,7 @@ __interrupt void usciab0_tx_isr(void)
 }
 
 #pragma vector=USCIAB0RX_VECTOR
-__interrupt void usciab0_rx_isr(void)
+__interrupt void USCIAB0RX_ISR(void)
 {
 	*spi_rx_buff = UCB0RXBUF;
 	if (spi_rx_num != 0) {

@@ -1,8 +1,8 @@
-#include "../user/motor.h"
-#include "../user/senser.h"
-#include "../user/record.h"
-#include "../user/display.h"
-#include "../interface/i2c.h"
+#include "user/motor.h"
+#include "user/senser.h"
+#include "user/record.h"
+#include "user/display.h"
+#include "interface/i2c.h"
 /*
  * user.c
  *

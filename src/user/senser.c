@@ -1,8 +1,8 @@
 #include <msp430g2553.h>
-#include "../user/motor.h"
-#include "../user/record.h"
-#include "../user/display.h"
-#include "../driver/bh1750.h"
+#include "user/motor.h"
+#include "user/record.h"
+#include "user/display.h"
+#include "driver/bh1750.h"
 /*
  * senser.c
  *

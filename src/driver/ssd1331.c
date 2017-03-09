@@ -1,7 +1,7 @@
 #include <msp430.h>
-#include "ssd1331.h"
-#include "../system/fonts.h"
-#include "../interface/spi.h"
+#include "system/fonts.h"
+#include "interface/spi.h"
+#include "driver/ssd1331.h"
 /*
  * --------SSD1331--------
  * PORT		TYPE	PIN
@@ -295,7 +295,7 @@ void ssd1331_display_string(unsigned char chXpos, unsigned char chYpos, const ch
     } 
 }
 
-void ssd1331_draw_1616char(unsigned char chXpos, unsigned char chYpos, unsigned char chChar, unsigned int hwColor)
+void ssd1331_draw_1612char(unsigned char chXpos, unsigned char chYpos, unsigned char chChar, unsigned int hwColor)
 {
 	unsigned char i, j;
 	unsigned char chTemp = 0, chYpos0 = chYpos;

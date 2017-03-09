@@ -2,8 +2,8 @@
 /*
  * ---------I2C---------
  * PORT		TYPE	PIN
+ * SDA      INOUT   P3.1
  * SCL		OUT		P3.0
- * SDA		INOUT	P3.1
  * ---------------------
  */
 #define I2C_SET_PIN()   {\

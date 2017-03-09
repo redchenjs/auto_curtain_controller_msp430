@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "../user/motor.h"
-#include "../user/senser.h"
-#include "../system/fonts.h"
-#include "../driver/ssd1331.h"
+#include "user/motor.h"
+#include "user/senser.h"
+#include "system/fonts.h"
+#include "driver/ssd1331.h"
 /*
  * display.c
  *

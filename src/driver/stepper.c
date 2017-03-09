@@ -1,5 +1,5 @@
 #include <msp430g2553.h>
-#include "../driver/stepper.h"
+#include "driver/stepper.h"
 
 unsigned char stepper_ready = 0;
 unsigned int stepper_location = 0;

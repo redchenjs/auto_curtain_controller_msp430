@@ -1,6 +1,6 @@
-#include "../user/motor.h"
-#include "../user/record.h"
-#include "../driver/stepper.h"
+#include "user/motor.h"
+#include "user/record.h"
+#include "driver/stepper.h"
 /*
  * motor.c
  *
@@ -18,8 +18,8 @@ void motor_update(void)
 			stepper_step(2000, FORWARD);
 		else if (motor_status_now == MOTOR_OPENING)
 			stepper_step(2000, BACKWARD);
-//		else
-//			record_write_status();
+		else
+			record_write_status();
 	}
 
 	motor_status_past = motor_status_now;

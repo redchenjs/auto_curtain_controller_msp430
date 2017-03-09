@@ -1,5 +1,5 @@
-#include "../driver/bh1750.h"
-#include "../interface/i2c.h"
+#include "driver/bh1750.h"
+#include "interface/i2c.h"
 /*
  * bh1750.c
  *

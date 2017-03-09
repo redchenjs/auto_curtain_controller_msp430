@@ -5,7 +5,13 @@
  *  Created on: 2017年2月19日
  *      Author: redchenjs
  */
-
+/*
+ * ---------UART---------
+ * PORT     TYPE    PIN
+ * TXD      OUT     P1.2
+ * RXD      IN      P1.1
+ * ---------------------
+ */
 void uart_init(void)
 {
 //	P1SEL  = BIT1 + BIT2;

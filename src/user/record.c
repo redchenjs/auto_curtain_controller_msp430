@@ -1,8 +1,8 @@
 #include <msp430g2553.h>
-#include "../user/motor.h"
-#include "../user/senser.h"
-#include "../user/display.h"
-#include "../device/flash.h"
+#include "user/motor.h"
+#include "user/senser.h"
+#include "user/display.h"
+#include "device/flash.h"
 /*
  * record.c
  *

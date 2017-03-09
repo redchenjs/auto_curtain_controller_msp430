@@ -1,4 +1,4 @@
-#include <msp430g2553.h>
+#include <msp430.h>
 /*
  * flash.c
  * 实际适用于MSP430x2xx系列单片机，包含以下10个常用功能函数：
