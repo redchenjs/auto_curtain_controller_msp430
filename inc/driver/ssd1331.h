@@ -2,7 +2,7 @@
 #define SSD1331_H_
 
 #define RGB(R,G,B)  (((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3))
-enum Color{
+enum rgb_color{
     BLACK     = RGB(  0,  0,  0), // black
     GREY      = RGB(192,192,192), // grey
     WHITE     = RGB(255,255,255), // white

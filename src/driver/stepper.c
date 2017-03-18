@@ -1,5 +1,7 @@
-#include <msp430g2553.h>
+#include <msp430.h>
 #include "driver/stepper.h"
+
+#define stepper_port P2OUT
 
 unsigned char stepper_ready = 0;
 unsigned int stepper_location = 0;
@@ -47,19 +49,20 @@ void stepper_init(void)
 	stepper_ready = 1;
 }
 
-#pragma vector = TIMER0_A0_VECTOR
-__interrupt void stepper_timer_isr(void)
+inline void stepper_timer_isr_handle(void)
 {
-	if (stepper_location != location_set) {
-		if (stepper_location < location_set) {
-			stepper_location++;
-		}
-		else {
-			stepper_location--;
-		}
-		P2OUT = stepper_mask[stepper_location % 4];
-	}
-	else {
-		stepper_init();
-	}
+    if (stepper_location != location_set) {
+        if (stepper_location < location_set) {
+            stepper_location++;
+        }
+        else {
+            stepper_location--;
+        }
+        stepper_port = stepper_mask[stepper_location & 0x03];
+    }
+    else {
+        TA0CTL |= MC_0;
+        stepper_port = 0x0f;
+        stepper_ready = 1;
+    }
 }

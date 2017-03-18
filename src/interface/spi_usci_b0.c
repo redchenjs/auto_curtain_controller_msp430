@@ -13,8 +13,8 @@
                             P1DIR |= BIT5 + BIT7;\
                          }
 
-static unsigned char *spi_tx_buff;
-static unsigned char *spi_rx_buff;
+static unsigned char *spi_tx_buff = 0;
+static unsigned char *spi_rx_buff = 0;
 
 static unsigned char spi_tx_num = 0;
 static unsigned char spi_rx_num = 0;
@@ -25,72 +25,70 @@ void spi_init(void)
 
     UCB0CTL1 |= UCSWRST;
 
-    UCB0CTL0 = UCMST + UCSYNC + UCCKPL + UCMSB;
-    UCB0CTL1 = UCSWRST + UCSSEL_2;
+    UCB0CTL0 |= UCMST + UCSYNC + UCCKPL + UCMSB;
+    UCB0CTL1 |= UCSSEL_2;
     UCB0BR0  = 1;
     UCB0BR1  = 0;
 
     UCB0CTL1 &=~UCSWRST;
 
-    IFG2 &=~(UCB0RXIFG + UCB0TXIFG);
+    UC0IFG &=~(UCB0RXIFG + UCB0TXIFG);
 }
 
 unsigned char spi_transmit_frame(unsigned char *p_buff, unsigned char num)
 {
 	if (num == 0) return 1;
-    if (UCA0STAT & UCBUSY) return 0;
+    if (UCB0STAT & UCBUSY) return 0;
 	__disable_interrupt();
 	spi_tx_buff = p_buff;
 	spi_tx_num  = num - 1;
-	IE2 &=~UCB0RXIE;
-	IE2 |= UCB0TXIE;
+	UC0IE &=~UCB0RXIE;
+	UC0IE |= UCB0TXIE;
 	__enable_interrupt();
 	UCB0TXBUF = *spi_tx_buff;
-    while (UCA0STAT & UCBUSY);
+    while (UCB0STAT & UCBUSY);
 	return 1;
 }
 
 unsigned char spi_receive_frame(unsigned char *p_buff, unsigned char num)
 {
 	if (num == 0) return 1;
-    if (UCA0STAT & UCBUSY) return 0;
+    if (UCB0STAT & UCBUSY) return 0;
 	__disable_interrupt();
     spi_rx_buff = p_buff;
     spi_rx_num  = num - 1;
-	IE2 &=~UCB0TXIE;
-	IE2 |= UCB0RXIE;
+    UC0IE &=~UCB0TXIE;
+    UC0IE |= UCB0RXIE;
     __enable_interrupt();
     UCB0TXBUF = 0xff;
-    while (UCA0STAT & UCBUSY);
+    while (UCB0STAT & UCBUSY);
 	return 1;
 }
 
-#pragma vector=USCIAB0TX_VECTOR
-__interrupt void USCIAB0TX_ISR(void)
+inline void spi_tx_isr_handle(void)
 {
-	UCB0RXBUF;
-	if (spi_tx_num != 0) {
-		spi_tx_num--;
-		spi_tx_buff++;
-		UCB0TXBUF = *spi_tx_buff;
-	}
-	else {
-		IFG2 &=~UCB0TXIFG;
-		IE2 &=~(UCB0TXIE + UCB0RXIE);
-	}
+    UCB0RXBUF;
+    if (spi_tx_num != 0) {
+        spi_tx_num--;
+        spi_tx_buff++;
+        UCB0TXBUF = *spi_tx_buff;
+    }
+    else {
+        UC0IFG &=~UCB0TXIFG;
+        UC0IE  &=~(UCB0TXIE + UCB0RXIE);
+    }
 }
 
-#pragma vector=USCIAB0RX_VECTOR
-__interrupt void USCIAB0RX_ISR(void)
+inline void spi_rx_isr_handle(void)
 {
-	*spi_rx_buff = UCB0RXBUF;
-	if (spi_rx_num != 0) {
-		spi_rx_num--;
-		spi_rx_buff++;
-		UCB0TXBUF = 0xff;
-	}
-	else {
-		IE2 &=~(UCB0TXIE + UCB0RXIE);
-	}
-	IFG2 &=~UCB0TXIFG;
+    *spi_rx_buff = UCB0RXBUF;
+    if (spi_rx_num != 0) {
+        spi_rx_num--;
+        spi_rx_buff++;
+        UCB0TXBUF = 0xff;
+    }
+    else {
+        UC0IE &=~(UCB0TXIE + UCB0RXIE);
+    }
+    UC0IFG &=~UCB0TXIFG;
 }

@@ -1,13 +1,16 @@
 /*
- * bluetooth.h
+ * link.h
  *
- *  Created on: 2017年2月19日
+ *  Created on: 2017-3-16
  *      Author: redchenjs
  */
 
-#ifndef SRC_USER_LINK_H_
-#define SRC_USER_LINK_H_
+#ifndef LINK_H_
+#define LINK_H_
 
+extern unsigned int link_status_now;
+extern unsigned int link_status_past;
 
+extern void link_update(void);
 
-#endif /* SRC_USER_LINK_H_ */
+#endif /* LINK_H_ */

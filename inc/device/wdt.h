@@ -1,7 +1,7 @@
 /*
  * wdt.h
  *
- *  Created on: 2016年10月20日
+ *  Created on: 2016-10-20
  *      Author: redchenjs
  */
 

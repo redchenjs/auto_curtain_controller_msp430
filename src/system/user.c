@@ -1,12 +1,14 @@
+#include "user/link.h"
 #include "user/motor.h"
 #include "user/senser.h"
 #include "user/record.h"
 #include "user/display.h"
-#include "interface/i2c.h"
+#include "user/terminal.h"
+#include "driver/stepper.h"
 /*
  * user.c
  *
- *  Created on: 2016年10月21日
+ *  Created on: 2016-10-21
  *      Author: redchenjs
  */
 
@@ -14,20 +16,20 @@ void user_init(void)
 {
 	record_read_all();
 
-	senser_set_lux(100);
-
 	display_init();
 
+	terminal_init();
 }
 
 void user_loop(void)
 {
-	senser_get_lux();
+    terminal_update();
 
-	display_refresh_lux();
-	display_refresh_set();
-	display_refresh_status();
-	display_refresh_progress();
+	senser_update();
+
+	link_update();
+
+	display_update();
 
 	motor_update();
 }

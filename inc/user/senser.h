@@ -1,7 +1,7 @@
 /*
  * senser.h
  *
- *  Created on: 2016年10月20日
+ *  Created on: 2016-10-20
  *      Author: redchenjs
  */
 
@@ -14,7 +14,7 @@ extern unsigned int senser_lux_past;
 extern unsigned int senser_set_now;
 extern unsigned int senser_set_past;
 
-extern void senser_get_lux(void);
+extern void senser_update(void);
 extern void senser_set_lux(unsigned int now);
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef FONTS_H
 #define FONTS_H
 
-enum FontSize{
+enum font_size {
     FONT_1206  = 12,
     FONT_1608  = 16,
     FONT_1612  = 18,

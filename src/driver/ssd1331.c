@@ -407,8 +407,10 @@ void ssd1331_init(void)
     ssd1331_write_byte(SET_V_VOLTAGE, SSD1331_CMD);        //Set vcomH
     ssd1331_write_byte(0x3E, SSD1331_CMD);
     ssd1331_write_byte(DEACTIVE_SCROLLING, SSD1331_CMD);   //disable scrolling
+
+    ssd1331_clear_screen(0x0000);
+
     ssd1331_write_byte(NORMAL_BRIGHTNESS_DISPLAY_ON, SSD1331_CMD);//set display on
 
 //    ssd1331_fill_rect(0, 0, 96, 64, 0x0000);
-    ssd1331_clear_screen(0x0000);
 }

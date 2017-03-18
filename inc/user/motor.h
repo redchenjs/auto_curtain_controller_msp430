@@ -1,18 +1,18 @@
 /*
  * motor.h
  *
- *  Created on: 2016年9月27日
+ *  Created on: 2016-9-27
  *      Author: redchenjs
  */
 
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
-enum MotorState {
-    MOTOR_CLOSED  = 0x0,
-    MOTOR_OPENED  = 0x1,
-    MOTOR_CLOSING = 0x2,
-    MOTOR_OPENING = 0x3
+enum motor_status {
+    CLOSED  = 0x0,
+    OPENED  = 0x1,
+    CLOSING = 0x2,
+    OPENING = 0x3
 };
 
 extern unsigned char motor_status_now;

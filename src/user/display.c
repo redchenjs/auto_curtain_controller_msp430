@@ -1,12 +1,14 @@
-#include <stdio.h>
+#include "user/link.h"
 #include "user/motor.h"
 #include "user/senser.h"
+#include "user/terminal.h"
 #include "system/fonts.h"
 #include "driver/ssd1331.h"
+#include "driver/bluetooth.h"
 /*
  * display.c
  *
- *  Created on: 2016年10月20日
+ *  Created on: 2016-10-20
  *      Author: redchenjs
  */
 static unsigned char init_flag = 0;
@@ -21,8 +23,8 @@ void display_refresh_lux(void)
 {
 	static char disp_lux[6];
 
-	if (senser_lux_now != senser_lux_past) {
-		sprintf(disp_lux, "%5u", senser_lux_now);
+	if (senser_lux_now != senser_lux_past || init_flag) {
+		terminal_value_to_string(senser_lux_now, disp_lux);
 		ssd1331_display_string(32, 0, disp_mask, FONT_1206, BLACK);
 		ssd1331_display_string(44, 0, disp_lux, FONT_1206, YELLOW);
 	}
@@ -34,8 +36,8 @@ void display_refresh_set(void)
 {
 	static char disp_set[6];
 
-	if (senser_set_now != senser_set_past) {
-		sprintf(disp_set, "%5u", senser_set_now);
+	if (senser_set_now != senser_set_past || init_flag) {
+	    terminal_value_to_string(senser_set_now, disp_set);
 		ssd1331_display_string(32, 16, disp_mask, FONT_1206, BLACK);
 		ssd1331_display_string(44, 16, disp_set, FONT_1206, PURPLE);
 	}
@@ -48,16 +50,16 @@ void display_refresh_status(void)
 	if ((motor_status_now != motor_status_past) || init_flag) {
 		ssd1331_display_string(54, 32, disp_mask, FONT_1206, BLACK);
 		switch (motor_status_now) {
-			case MOTOR_CLOSED:
+			case CLOSED:
 				ssd1331_display_string(60, 32, "closed", FONT_1206, RED);
 				break;
-			case MOTOR_OPENED:
+			case OPENED:
 				ssd1331_display_string(60, 32, "opened", FONT_1206, GREEN);
 				break;
-			case MOTOR_CLOSING:
+			case CLOSING:
 				ssd1331_display_string(54, 32, "closing", FONT_1206, YELLOW);
 				break;
-			case MOTOR_OPENING:
+			case OPENING:
 				ssd1331_display_string(54, 32, "opening", FONT_1206, YELLOW);
 				break;
 			default:
@@ -101,6 +103,78 @@ void display_refresh_progress(void)
 	display_index_past = display_index_now;
 }
 
+void display_refresh_link(void)
+{
+    static unsigned char cnt;
+
+    if ((link_status_now != link_status_past) || init_flag) {
+        switch (link_status_now) {
+            case OFFLINE:
+                ssd1331_draw_bitmap(44, 34, &c_chBluetooth88[0], 8, 8, BLACK);
+                break;
+            case ONLINE:
+                ssd1331_draw_bitmap(44, 34, &c_chBluetooth88[0], 8, 8, BLUE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (link_status_now) {
+        if (cnt++ & 0x01)
+            ssd1331_draw_bitmap(44, 34, &c_chBluetooth88[0], 8, 8, GREEN);
+        else
+            ssd1331_draw_bitmap(44, 34, &c_chBluetooth88[0], 8, 8, BLUE);
+    }
+}
+
+void display_update(void)
+{
+    static unsigned int cnt_above = 0;
+    static unsigned int cnt_below = 0;
+
+    if (mode_now == AUTO) {
+        if (senser_lux_now >= senser_set_now) {
+            cnt_above++;
+        }
+        else {
+            cnt_below++;
+        }
+
+        if (cnt_above >= 1) {
+            cnt_above = 0;
+            if (display_index_now < 15) {
+                display_index_now++;
+            }
+        }
+
+        if (cnt_below >= 1) {
+            cnt_below = 0;
+            if (display_index_now > 0) {
+                display_index_now--;
+            }
+        }
+
+        if (display_index_now == 15 && motor_status_now != 1){
+            motor_status_now = 3;
+        }
+
+        if (display_index_now == 0 && motor_status_now != 0){
+            motor_status_now = 2;
+        }
+    }
+
+    display_refresh_lux();
+
+    display_refresh_set();
+
+    display_refresh_status();
+
+    display_refresh_progress();
+
+    display_refresh_link();
+}
+
 void display_init(void)
 {
 	init_flag = 1;
@@ -111,11 +185,15 @@ void display_init(void)
 	ssd1331_display_string(78, 16, "lux", FONT_1206, WHITE);
 	ssd1331_display_string(0, 32, "status:", FONT_1206, WHITE);
 
+	display_refresh_lux();
+
+	display_refresh_set();
+
 	display_refresh_status();
 
 	display_refresh_progress();
 
-//	ssd1331_draw_bitmap(42, 35, &c_chBluetooth88[0], 8, 8, BLUE);
+	display_refresh_link();
 
 	init_flag = 0;
 }

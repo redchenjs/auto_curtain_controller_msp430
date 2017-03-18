@@ -3,7 +3,7 @@
 /*
  * bh1750.c
  *
- *  Created on: 2016年10月20日
+ *  Created on: 2016-10-20
  *      Author: redchenjs
  */
 #define BH1750_ADDRESS 0x23
@@ -24,5 +24,5 @@ void bh1750_set_mode(unsigned char mode)
 
 void bh1750_init(void)
 {
-	bh1750_set_mode(BH1750_ONE_TIME_H_RESOLUTION_MODE);
+	bh1750_set_mode(ONE_TIME_H_RESOLUTION_MODE);
 }
