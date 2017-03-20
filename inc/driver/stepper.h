@@ -7,8 +7,11 @@ enum direction {
 };
 
 extern unsigned char stepper_ready;
-extern unsigned int stepper_location;
 
+extern unsigned int stepper_location_now;
+extern unsigned int stepper_location_set;
+
+extern void stepper_update(void);
 extern void stepper_init(void);
 extern void stepper_step(unsigned int steps_to_move, unsigned char direction);
 

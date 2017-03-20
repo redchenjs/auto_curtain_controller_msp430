@@ -12,7 +12,7 @@ __interrupt void WDT_ISR(void)
 {
     static unsigned int cnt = 0;
 
-    if (cnt++ > 400) {
+    if (cnt++ > 500) {
         cnt = 0;
         __bic_SR_register_on_exit(LPM0_bits);
     }
@@ -27,19 +27,21 @@ __interrupt void TIMER0_A0_ISR(void)
 #pragma vector=USCIAB0TX_VECTOR
 __interrupt void USCIAB0TX_ISR(void)
 {
-    if (UC0IFG & UCA0TXIFG)
+    if (UC0IFG & UCA0TXIFG) {
         uart_tx_isr_handle();
-
-    if (UC0IFG & UCB0TXIFG)
+    }
+    else if (UC0IFG & UCB0TXIFG) {
         spi_tx_isr_handle();
+    }
 }
 
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCIAB0RX_ISR(void)
 {
-    if (UC0IFG & UCA0RXIFG)
+    if (UC0IFG & UCA0RXIFG) {
         uart_rx_isr_handle();
-
-    if (UC0IFG & UCB0RXIFG)
+    }
+    else if (UC0IFG & UCB0RXIFG) {
         spi_rx_isr_handle();
+    }
 }

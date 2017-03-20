@@ -21,5 +21,6 @@ extern unsigned char motor_status_past;
 extern void motor_init(void);
 extern void motor_step(int num);
 extern void motor_update(void);
+extern void motor_set_position(unsigned int value);
 
 #endif

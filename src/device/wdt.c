@@ -9,5 +9,5 @@
 void wdt_init(void)
 {
 	WDTCTL = WDT_MDLY_8;
-	IE1	|= WDTIE;
+	IE1	  |= WDTIE;
 }

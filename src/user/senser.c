@@ -21,10 +21,10 @@ void senser_update(void)
 	bh1750_set_mode(ONE_TIME_H_RESOLUTION_MODE);
 }
 
-void senser_set_lux(unsigned int now)
+void senser_set_lux(unsigned int value)
 {
     senser_set_past = senser_set_now;
-    senser_set_now = now;
+    senser_set_now = value;
 
 	record_write_all();
 }

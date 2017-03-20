@@ -15,8 +15,7 @@ enum terminal_mode {
 extern unsigned char mode_now;
 extern unsigned char mode_past;
 
-extern void terminal_value_to_string(unsigned int value, char *p_string);
-extern char* terminal_sub_string(char* p_string, unsigned char position, unsigned char length);
+extern void terminal_set_mode(unsigned int value);
 
 extern void terminal_update(void);
 

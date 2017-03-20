@@ -1,6 +1,8 @@
 #include "user/motor.h"
 #include "user/record.h"
+#include "user/display.h"
 #include "driver/stepper.h"
+#include "user/terminal.h"
 /*
  * motor.c
  *
@@ -12,25 +14,34 @@ unsigned char motor_status_past = CLOSED;
 
 void motor_update(void)
 {
-	if (motor_status_now != motor_status_past) {
-		if (motor_status_now == CLOSING)
-			stepper_step(2000, FORWARD);
-		else if (motor_status_now == OPENING)
-			stepper_step(2000, BACKWARD);
-		else
-		    record_write_all();
+    motor_status_past = motor_status_now;
+    if (stepper_ready) {
+        switch (motor_status_now) {
+            case CLOSED:
+            case OPENED:
+                if (stepper_location_now > stepper_location_set) {
+                    motor_status_now = OPENING;
+                    stepper_update();
+                }
+                else if (stepper_location_now < stepper_location_set) {
+                    motor_status_now = CLOSING;
+                    stepper_update();
+                }
+                break;
+            case CLOSING:
+            case OPENING:
+                motor_status_now -= 2;
+                record_write_all();
+                break;
+            default:
+                break;
+        }
 	}
+}
 
-	motor_status_past = motor_status_now;
-
-	if (stepper_ready) {
-		if (motor_status_now == CLOSING) {
-			motor_status_now = CLOSED;
-		}
-		else if (motor_status_now == OPENING) {
-			motor_status_now = OPENED;
-		}
-	}
+void motor_set_position(unsigned int value)
+{
+    stepper_location_set = value;
 }
 
 void motor_init(void)

@@ -1,8 +1,10 @@
+#include <stdio.h>
 #include "user/link.h"
 #include "user/motor.h"
 #include "user/senser.h"
 #include "user/terminal.h"
 #include "system/fonts.h"
+#include "driver/stepper.h"
 #include "driver/ssd1331.h"
 #include "driver/bluetooth.h"
 /*
@@ -24,7 +26,7 @@ void display_refresh_lux(void)
 	static char disp_lux[6];
 
 	if (senser_lux_now != senser_lux_past || init_flag) {
-		terminal_value_to_string(senser_lux_now, disp_lux);
+		sprintf(disp_lux, "%5u", senser_lux_now);
 		ssd1331_display_string(32, 0, disp_mask, FONT_1206, BLACK);
 		ssd1331_display_string(44, 0, disp_lux, FONT_1206, YELLOW);
 	}
@@ -37,7 +39,7 @@ void display_refresh_set(void)
 	static char disp_set[6];
 
 	if (senser_set_now != senser_set_past || init_flag) {
-	    terminal_value_to_string(senser_set_now, disp_set);
+	    sprintf(disp_set, "%5u", senser_set_now);
 		ssd1331_display_string(32, 16, disp_mask, FONT_1206, BLACK);
 		ssd1331_display_string(44, 16, disp_set, FONT_1206, PURPLE);
 	}
@@ -72,12 +74,12 @@ void display_refresh_progress(void)
 {
     if (init_flag) {
         switch (motor_status_now) {
-            case 0:
-            case 2:
+            case CLOSED:
+            case CLOSING:
                 ssd1331_display_string(0, 48, prog_mask, FONT_1206, RED);
                 break;
-            case 1:
-            case 3:
+            case OPENED:
+            case OPENING:
                 ssd1331_display_string(0, 48, prog_mask, FONT_1206, GREEN);
                 break;
             default:
@@ -130,40 +132,6 @@ void display_refresh_link(void)
 
 void display_update(void)
 {
-    static unsigned int cnt_above = 0;
-    static unsigned int cnt_below = 0;
-
-    if (mode_now == AUTO) {
-        if (senser_lux_now >= senser_set_now) {
-            cnt_above++;
-        }
-        else {
-            cnt_below++;
-        }
-
-        if (cnt_above >= 1) {
-            cnt_above = 0;
-            if (display_index_now < 15) {
-                display_index_now++;
-            }
-        }
-
-        if (cnt_below >= 1) {
-            cnt_below = 0;
-            if (display_index_now > 0) {
-                display_index_now--;
-            }
-        }
-
-        if (display_index_now == 15 && motor_status_now != 1){
-            motor_status_now = 3;
-        }
-
-        if (display_index_now == 0 && motor_status_now != 0){
-            motor_status_now = 2;
-        }
-    }
-
     display_refresh_lux();
 
     display_refresh_set();

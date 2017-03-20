@@ -17,9 +17,6 @@
 static unsigned char *uart_tx_buff = 0;
 static unsigned char uart_rx_buff[SIZE] = {0};
 
-static unsigned char uart_rx_read_index  = 0;
-static unsigned char uart_rx_write_index = 0;
-
 static unsigned char uart_tx_num = 0;
 static unsigned char uart_rx_num = 0;
 
@@ -31,15 +28,15 @@ void uart_init(void)
     UCA0CTL1 |= UCSWRST;
 
 	UCA0CTL1 |= UCSSEL_2;
-	UCA0BR0  = 140;
+	UCA0BR0  = 139;
 	UCA0BR1  = 0;
-    UCA0MCTL = UCBRS2 + UCBRS0;
+    UCA0MCTL = UCBRS0;
 
 	UCA0CTL1 &=~UCSWRST;
 
     UC0IFG &=~(UCA0RXIFG + UCA0TXIFG);
 
-	UC0IE  |= UCA0RXIE;
+    UC0IE |= UCA0RXIE;
 }
 
 unsigned char uart_transmit_frame(unsigned char *p_buff, unsigned char num)
@@ -58,17 +55,15 @@ unsigned char uart_transmit_frame(unsigned char *p_buff, unsigned char num)
 
 unsigned char uart_receive_frame(unsigned char *p_buff, unsigned char num)
 {
-    unsigned char i, cnt=0;
+    unsigned char cnt=0;
     if (num == 0 || uart_rx_num == 0) return 0;
+    p_buff += uart_rx_num;
     __disable_interrupt();
-    for (i = uart_rx_num; i>0 && num>0; i--, num--) {
-        if (uart_rx_read_index == SIZE) {
-            uart_rx_read_index = 0;
-        }
-        *p_buff++ = uart_rx_buff[uart_rx_read_index++];
-        uart_rx_num--;
+    do {
+        *--p_buff = uart_rx_buff[--uart_rx_num];
         cnt++;
-    }
+    }while (uart_rx_num > 0);
+    uart_rx_num = 0;
     __enable_interrupt();
     return cnt;
 }
@@ -88,12 +83,8 @@ inline void uart_tx_isr_handle(void)
 
 inline void uart_rx_isr_handle(void)
 {
-    if (uart_rx_write_index == SIZE) {
-        uart_rx_write_index = 0;
-    }
     if (uart_rx_num == SIZE) {
-        uart_rx_num = 0;
+        uart_rx_num = SIZE-1;
     }
-    uart_rx_buff[uart_rx_write_index++] = UCA0RXBUF;
-    uart_rx_num++;
+    uart_rx_buff[uart_rx_num++] = UCA0RXBUF;
 }

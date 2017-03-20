@@ -1,6 +1,7 @@
 #include "user/link.h"
 #include "user/motor.h"
 #include "user/senser.h"
+#include "user/status.h"
 #include "user/record.h"
 #include "user/display.h"
 #include "user/terminal.h"
@@ -29,9 +30,9 @@ void user_loop(void)
 
 	link_update();
 
+	status_update();
+
+    motor_update();
+
 	display_update();
-
-	motor_update();
 }
-
-
