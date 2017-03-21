@@ -12,7 +12,7 @@ __interrupt void WDT_ISR(void)
 {
     static unsigned int cnt = 0;
 
-    if (cnt++ > 500) {
+    if (cnt++ > 400) {
         cnt = 0;
         __bic_SR_register_on_exit(LPM0_bits);
     }

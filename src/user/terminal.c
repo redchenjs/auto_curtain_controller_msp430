@@ -5,7 +5,6 @@
 #include "user/senser.h"
 #include "user/record.h"
 #include "user/terminal.h"
-#include "driver/stepper.h"
 #include "interface/uart.h"
 /*
  * terminal.c
@@ -29,6 +28,8 @@ enum func {
 
 unsigned char mode_now  = AUTO;
 unsigned char mode_past = AUTO;
+
+static const unsigned char init_message[] = "msp430g2553 initialized.\n";
 
 static unsigned char read_buff[SIZE] = {0};
 static unsigned char read_buff_num = 0;
@@ -168,7 +169,7 @@ unsigned char terminal_match(void)
                 }
                 terminal_set_mode(MANUAL);
                 motor_set_position(value);
-                sprintf(p_string, "%u\n", stepper_location_set);
+                sprintf(p_string, "%u\n", motor_position_now);
                 uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
                 break;
             default:
@@ -218,18 +219,8 @@ unsigned char terminal_match(void)
                 }
                 break;
             case POSITION:
-                p_string = terminal_sub_string((char *)read_buff, 8, 4);
-                if (strcmp(p_string, "now\n") == 0) {
-                    sprintf(p_string, "%u\n", stepper_location_now);
-                    uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
-                }
-                else if (strcmp(p_string, "set\n") == 0) {
-                    sprintf(p_string, "%u\n", stepper_location_set);
-                    uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
-                }
-                else {
-                    return 0;
-                }
+                sprintf(p_string, "%u\n", motor_position_now);
+                uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
                 break;
             default:
                 break;
@@ -251,5 +242,5 @@ void terminal_update(void)
 
 void terminal_init(void)
 {
-    uart_transmit_frame("msp430g2553 terminal initialized.\n", 34);
+    uart_transmit_frame((unsigned char*)init_message, strlen((char*)init_message));
 }

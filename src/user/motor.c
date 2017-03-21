@@ -2,13 +2,15 @@
 #include "user/record.h"
 #include "user/display.h"
 #include "driver/stepper.h"
-#include "user/terminal.h"
 /*
  * motor.c
  *
  *  Created on: 2016-9-27
  *      Author: redchenjs
  */
+unsigned char motor_position_now  = 0;
+unsigned char motor_position_past = 100;
+
 unsigned char motor_status_now  = CLOSED;
 unsigned char motor_status_past = CLOSED;
 
@@ -39,12 +41,17 @@ void motor_update(void)
 	}
 }
 
-void motor_set_position(unsigned int value)
+void motor_set_position(unsigned char value)
 {
-    stepper_location_set = value;
+    motor_position_past = motor_position_now;
+    if (value > 100)
+        value = 100;
+    motor_position_now  = value;
+    stepper_location_set = (unsigned int)motor_position_now * 20;
 }
 
 void motor_init(void)
 {
-
+    stepper_location_set = (unsigned int)motor_position_now * 20;
+    stepper_location_now = stepper_location_set;
 }

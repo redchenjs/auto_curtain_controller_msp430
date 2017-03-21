@@ -4,7 +4,6 @@
 #include "user/senser.h"
 #include "user/terminal.h"
 #include "system/fonts.h"
-#include "driver/stepper.h"
 #include "driver/ssd1331.h"
 #include "driver/bluetooth.h"
 /*

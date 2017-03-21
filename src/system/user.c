@@ -17,6 +17,10 @@ void user_init(void)
 {
 	record_read_all();
 
+	status_init();
+
+	motor_init();
+
 	display_init();
 
 	terminal_init();

@@ -4,10 +4,6 @@
 #include "user/senser.h"
 #include "user/display.h"
 #include "user/terminal.h"
-#include "system/fonts.h"
-#include "driver/stepper.h"
-#include "driver/ssd1331.h"
-#include "driver/bluetooth.h"
 /*
  * status.c
  *
@@ -42,12 +38,26 @@ void status_update(void)
             }
         }
 
-        if (display_index_now == 15 && stepper_location_set != 0){
-            stepper_location_set = 0;
+        if (display_index_now == 15 && motor_position_now != 0){
+            motor_set_position(0);
         }
 
-        if (display_index_now == 0 && stepper_location_set != 2000){
-            stepper_location_set = 2000;
+        if (display_index_now == 0 && motor_position_now != 100){
+            motor_set_position(100);
         }
     }
+}
+
+void status_init(void)
+{
+    if (mode_now > 1) mode_now = 0;
+
+    if (motor_position_now > 100) motor_position_now = 100;
+
+    if (motor_status_now > 3) motor_status_now = 0;
+
+    if (!motor_status_now)
+        display_index_now = 0;
+    else
+        display_index_now = 15;
 }
