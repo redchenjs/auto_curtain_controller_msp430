@@ -1,6 +1,6 @@
 #include <msp430.h>
-#include "system/init.h"
-#include "system/user.h"
+#include "inc/system/init.h"
+#include "inc/system/user.h"
 /*
  * main.c
  *

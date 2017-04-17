@@ -1,9 +1,9 @@
-#include "user/link.h"
-#include "user/motor.h"
-#include "user/record.h"
-#include "user/senser.h"
-#include "user/display.h"
-#include "user/terminal.h"
+#include "inc/apps/display.h"
+#include "inc/apps/link.h"
+#include "inc/apps/motor.h"
+#include "inc/apps/record.h"
+#include "inc/apps/senser.h"
+#include "inc/apps/terminal.h"
 /*
  * status.c
  *

@@ -1,5 +1,5 @@
 #include <msp430.h>
-#include "driver/bluetooth.h"
+#include "inc/driver/bluetooth.h"
 /*
  * bluetooth.c
  *

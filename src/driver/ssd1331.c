@@ -1,7 +1,7 @@
 #include <msp430.h>
-#include "system/fonts.h"
-#include "interface/spi.h"
-#include "driver/ssd1331.h"
+#include "inc/device/spi.h"
+#include "inc/system/fonts.h"
+#include "inc/driver/ssd1331.h"
 /*
  * --------SSD1331--------
  * PORT		TYPE	PIN

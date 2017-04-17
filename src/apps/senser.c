@@ -1,7 +1,7 @@
-#include "user/motor.h"
-#include "user/record.h"
-#include "user/display.h"
-#include "driver/bh1750.h"
+#include "inc/apps/display.h"
+#include "inc/apps/motor.h"
+#include "inc/apps/record.h"
+#include "inc/driver/bh1750.h"
 /*
  * senser.c
  *

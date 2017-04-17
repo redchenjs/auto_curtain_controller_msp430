@@ -1,11 +1,11 @@
 #include <stdio.h>
-#include "user/link.h"
-#include "user/motor.h"
-#include "user/senser.h"
-#include "user/terminal.h"
-#include "system/fonts.h"
-#include "driver/ssd1331.h"
-#include "driver/bluetooth.h"
+#include "inc/apps/link.h"
+#include "inc/apps/motor.h"
+#include "inc/apps/senser.h"
+#include "inc/apps/terminal.h"
+#include "inc/system/fonts.h"
+#include "inc/driver/ssd1331.h"
+#include "inc/driver/bluetooth.h"
 /*
  * display.c
  *
@@ -26,8 +26,8 @@ void display_refresh_lux(void)
 
 	if (senser_lux_now != senser_lux_past || init_flag) {
 		sprintf(disp_lux, "%5u", senser_lux_now);
-		ssd1331_display_string(32, 0, disp_mask, FONT_1206, BLACK);
-		ssd1331_display_string(44, 0, disp_lux, FONT_1206, YELLOW);
+		ssd1331_display_string(36, 0, disp_mask, FONT_1206, BLACK);
+		ssd1331_display_string(48, 0, disp_lux, FONT_1206, YELLOW);
 	}
 
 	senser_lux_past = senser_lux_now;
@@ -39,8 +39,8 @@ void display_refresh_set(void)
 
 	if (senser_set_now != senser_set_past || init_flag) {
 	    sprintf(disp_set, "%5u", senser_set_now);
-		ssd1331_display_string(32, 16, disp_mask, FONT_1206, BLACK);
-		ssd1331_display_string(44, 16, disp_set, FONT_1206, PURPLE);
+		ssd1331_display_string(36, 16, disp_mask, FONT_1206, BLACK);
+		ssd1331_display_string(48, 16, disp_set, FONT_1206, PURPLE);
 	}
 
 	senser_set_past = senser_set_now;
@@ -147,9 +147,9 @@ void display_init(void)
 	init_flag = 1;
 
 	ssd1331_display_string(0, 0, "now:", FONT_1206, WHITE);
-	ssd1331_display_string(78, 0, "lux", FONT_1206, WHITE);
+	ssd1331_display_string(84, 0, "lx", FONT_1206, WHITE);
 	ssd1331_display_string(0, 16, "set:", FONT_1206, WHITE);
-	ssd1331_display_string(78, 16, "lux", FONT_1206, WHITE);
+	ssd1331_display_string(84, 16, "lx", FONT_1206, WHITE);
 	ssd1331_display_string(0, 32, "status:", FONT_1206, WHITE);
 
 	display_refresh_lux();

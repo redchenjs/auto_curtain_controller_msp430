@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "user/motor.h"
-#include "user/senser.h"
-#include "user/record.h"
-#include "user/terminal.h"
-#include "interface/uart.h"
+
+#include "inc/apps/motor.h"
+#include "inc/apps/record.h"
+#include "inc/apps/senser.h"
+#include "inc/apps/terminal.h"
+#include "inc/device/uart.h"
 /*
  * terminal.c
  *

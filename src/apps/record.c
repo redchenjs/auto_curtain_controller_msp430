@@ -1,10 +1,10 @@
-#include "device/bcs.h"
-#include "user/motor.h"
-#include "user/senser.h"
-#include "user/display.h"
-#include "user/terminal.h"
-#include "device/flash.h"
-#include "driver/stepper.h"
+#include "inc/apps/display.h"
+#include "inc/apps/motor.h"
+#include "inc/apps/senser.h"
+#include "inc/apps/terminal.h"
+#include "inc/device/bcs.h"
+#include "inc/device/flash.h"
+#include "inc/driver/stepper.h"
 /*
  * record.c
  *
