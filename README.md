@@ -1,4 +1,4 @@
-# bth_curtain_core
+# auto_curtain_controller_msp430
 
 A simple design of an automatic curtain controller based on msp430g2553 core，bh1750fvi light senser，ds3231 rtc moudule，hc-05 bluetooth uart and ssd1331 96x96 rgb oled for display.
 
@@ -10,7 +10,7 @@ A simple design of an automatic curtain controller based on msp430g2553 core，b
 
 ## Step 1: Clone the git
 * Use command:
-`git clone https://github.com/redchenjs/bth_curtain_core.git`
+`git clone https://github.com/redchenjs/auto_curtain_controller_msp430.git`
 
 ## Step 2: Create a new CCS Project
 
@@ -20,7 +20,7 @@ A simple design of an automatic curtain controller based on msp430g2553 core，b
 
 * Select the "Target" option to "MSP430GXXXX Family" and select the "MSP430G2553".
 
-* Deselect the "Use default location" and locate it to the folder we just cloned(like /home/xxxx/bth_curtain_core).
+* Deselect the "Use default location" and locate it to the folder we just cloned(like /home/xxxx/auto_curtain_controller_msp430).
 
 * Select the "Empty Project" template, since our project has a main.c already, do not use the "Empty Project(with main.c)" template.
 
