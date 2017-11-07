@@ -1,8 +1,8 @@
 #include <msp430.h>
-#include "inc/device/wdt.h"
-#include "inc/device/spi.h"
-#include "inc/device/uart.h"
-#include "inc/driver/stepper.h"
+#include "device/wdt.h"
+#include "device/spi.h"
+#include "device/uart.h"
+#include "driver/stepper.h"
 /*
  * vector.c
  *

@@ -1,12 +1,12 @@
+#include <module/motor.h>
+#include <module/record.h>
+#include <module/senser.h>
+#include <module/terminal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "inc/apps/motor.h"
-#include "inc/apps/record.h"
-#include "inc/apps/senser.h"
-#include "inc/apps/terminal.h"
-#include "inc/device/uart.h"
+#include "device/uart.h"
 /*
  * terminal.c
  *

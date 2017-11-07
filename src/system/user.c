@@ -1,10 +1,10 @@
-#include "inc/apps/display.h"
-#include "inc/apps/link.h"
-#include "inc/apps/motor.h"
-#include "inc/apps/record.h"
-#include "inc/apps/senser.h"
-#include "inc/apps/status.h"
-#include "inc/apps/terminal.h"
+#include <module/display.h>
+#include <module/link.h>
+#include <module/motor.h>
+#include <module/record.h>
+#include <module/senser.h>
+#include <module/status.h>
+#include <module/terminal.h>
 /*
  * user.c
  *

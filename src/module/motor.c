@@ -1,7 +1,7 @@
-#include "inc/apps/motor.h"
-#include "inc/apps/record.h"
-#include "inc/apps/display.h"
-#include "inc/driver/stepper.h"
+#include <module/display.h>
+#include <module/motor.h>
+#include <module/record.h>
+#include "driver/stepper.h"
 /*
  * motor.c
  *

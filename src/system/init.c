@@ -1,11 +1,11 @@
-#include "inc/device/bcs.h"
-#include "inc/device/wdt.h"
-#include "inc/device/i2c.h"
-#include "inc/device/spi.h"
-#include "inc/device/uart.h"
-#include "inc/driver/bh1750.h"
-#include "inc/driver/ssd1331.h"
-#include "inc/driver/stepper.h"
+#include "device/bcs.h"
+#include "device/wdt.h"
+#include "device/i2c.h"
+#include "device/spi.h"
+#include "device/uart.h"
+#include "driver/bh1750.h"
+#include "driver/ssd1331.h"
+#include "driver/stepper.h"
 
 void device_init(void)
 {

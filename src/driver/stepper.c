@@ -1,5 +1,5 @@
 #include <msp430.h>
-#include "inc/driver/stepper.h"
+#include "driver/stepper.h"
 
 #define stepper_port P2OUT
 

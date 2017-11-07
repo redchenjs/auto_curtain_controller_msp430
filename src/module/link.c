@@ -1,4 +1,4 @@
-#include "inc/driver/bluetooth.h"
+#include "driver/bluetooth.h"
 /*
  * link.c
  *
