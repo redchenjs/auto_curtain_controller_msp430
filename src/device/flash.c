@@ -14,9 +14,9 @@ static unsigned int seg_pre  = 0;    // 全局变量 当前信息段
 * 名    称：flash_init()
 * 功    能：对Flash时钟进行初始化设置
 * 入口参数：div：根据SMCLK频率计算的所需分频值，可设定为1-64
-*         seg：段号，可设为"0"-"31"或”"A"、"B"、"C"、"D"
+*          seg：段号，可设为"0"-"31"或”"A"、"B"、"C"、"D"
 * 出口参数：1：配置成功
-*         0：配置失败
+*          0：配置失败
 * 说    明：操作Flash其他函数前，需要调用该初始化函数设置时钟分频和待操作段首地址。
 *          其他函数中均不出现绝对地址，防止误操作。
 * 范    例：flash_init(3,'B') 3分频、对Info B段操作
@@ -114,8 +114,8 @@ unsigned int flash_read_word(unsigned int addr)
 * 名    称：flash_read_seg()
 * 功    能：将Flash段内一串数据拷贝到RAM的array数组
 * 入口参数：addr：起始偏移地址
-*         seg_size：数据个数
-*         *array：RAM中数组的头指针
+*          seg_size：数据个数
+*          *array：RAM中数组的头指针
 * 出口参数：返回出错信息 0：偏移溢出；1：正常工作
 * 说    明：无
 * 范    例：无
@@ -140,7 +140,7 @@ char flash_read_seg(unsigned int addr, unsigned int seg_size, unsigned char *arr
 * 名    称：flash_direct_write_char()
 * 功    能：强行向Flash中写入一个字节(Char型变量)，而不管是否为空
 * 入口参数：addr:存放数据的偏移地址
-*         data:待写入的数据
+*          data:待写入的数据
 * 出口参数：返回出错信息 0：偏移溢出；1：正常工作
 * 范    例：flash_direct_write_char(0,123);将常数123写入0单元
 *          flash_direct_write_char(1,a);将整型变量a写入1单元
@@ -170,7 +170,7 @@ char flash_direct_write_char(unsigned int addr, unsigned char data)
 * 名    称：flash_direct_write_word()
 * 功    能：强行向Flash中写入一个字型变量，而不管存储位置是否事先擦除
 * 入口参数：addr：存放数据的偏移地址，仍按字节计算，需为偶数
-*         data：待写入的数据
+*          data：待写入的数据
 * 出口参数：返回出错信息 0：偏移溢出；1：正常工作
 * 范    例：flash_direct_write_word(0,123);将常数123写入0单元
 *          flash_direct_write_word(2,a);将整型变量a写入2单元
@@ -200,7 +200,7 @@ char flash_direct_write_word(unsigned int addr, unsigned int data)
 * 名    称：flash_bak_write_char()
 * 功    能：不破坏段内其他数据，向Flash中写入一个字节(char型变量)
 * 入口参数：addr：存放数据的地址
-*         data：待写入的数据
+*          data：待写入的数据
 * 出口参数：返回出错信息 0：偏移溢出；1：正常工作
 * 范    例：flash_bak_write_char(0,123);将常数123写入0单元
 *          flash_bak_write_char(1,a);将变量a写入1单元
@@ -247,7 +247,7 @@ char flash_bak_write_char(unsigned int addr, unsigned char data)
 * 名    称：flash_bak_write_word()
 * 功    能：不破坏段内其他数据，向Flash中写入一个字(int型变量)
 * 入口参数：addr：存放数据的地址，仍然是以字节为单位的偏移地址，需为偶数
-*         data：待写入的数据
+*          data：待写入的数据
 * 出口参数：返回出错信息 0：偏移溢出；1：正常工作
 * 说    明：MSP430单片机可以对16位数据直接操作，所以为了加快速度，
 *          函数中均直接对word进行操作。
