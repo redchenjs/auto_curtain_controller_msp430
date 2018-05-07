@@ -3,13 +3,6 @@
  *
  *  Created on: 2016-03-22
  *      Author: Jack Chen <redchenjs@live.com>
- * 
- * ---------SPI---------
- * PORT		TYPE	PIN
- * MOSI		OUT		P1.7
- * MISO		IN		P1.6
- * SCK      OUT     P1.5
- * ---------------------
  */
 
 #include <msp430.h>
@@ -18,7 +11,7 @@
                             P1SEL |= BIT5 + BIT6 + BIT7;\
                             P1SEL2|= BIT5 + BIT6 + BIT7;\
                             P1DIR |= BIT5 + BIT7;\
-                         }
+                        }
 
 static unsigned char *spi_tx_buff = 0;
 static unsigned char *spi_rx_buff = 0;

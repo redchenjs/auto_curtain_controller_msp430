@@ -3,12 +3,6 @@
  *
  *  Created on: 2016-03-22
  *      Author: Jack Chen <redchenjs@live.com>
- * 
- * ---------I2C---------
- * PORT		TYPE	PIN
- * SDA      INOUT   P3.1
- * SCL		OUT		P3.0
- * ---------------------
  */
 
 #include <msp430.h>
@@ -18,7 +12,7 @@
                             P3OUT &=~BIT0;\
                             P3DIR &=~BIT1;\
                             P3OUT &=~BIT1;\
-                         }
+                        }
 #define I2C_SCL_SET()	P3DIR &=~BIT0
 #define I2C_SCL_CLR()	P3DIR |= BIT0
 #define I2C_SDA_SET()	P3DIR &=~BIT1

@@ -3,12 +3,6 @@
  *
  *  Created on: 2017-02-19
  *      Author: Jack Chen <redchenjs@live.com>
- * 
- * ---------UART---------
- * PORT     TYPE    PIN
- * TXD      OUT     P1.2
- * RXD      IN      P1.1
- * ---------------------
  */
 
 #include <msp430.h>
