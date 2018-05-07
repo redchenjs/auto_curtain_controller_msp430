@@ -1,6 +1,14 @@
-#ifndef INIT_H_
-#define INIT_H_
+/*
+ * init.h
+ *
+ *  Created on: 2016-10-20
+ *      Author: Jack Chen <redchenjs@live.com>
+ */
 
-void system_init(void);
+#ifndef INC_SYSTEM_INIT_H_
+#define INC_SYSTEM_INIT_H_
 
-#endif
+extern void device_init(void);
+extern void driver_init(void);
+
+#endif /* INC_SYSTEM_INIT_H_ */

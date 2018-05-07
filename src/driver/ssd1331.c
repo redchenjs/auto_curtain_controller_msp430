@@ -1,8 +1,9 @@
-#include <msp430.h>
-#include "device/spi.h"
-#include "system/fonts.h"
-#include "driver/ssd1331.h"
 /*
+ * ssd1331.c
+ *
+ *  Created on: 2016-10-20
+ *      Author: Jack Chen <redchenjs@live.com>
+ * 
  * --------SSD1331--------
  * PORT		TYPE	PIN
  * RES		OUT		P3.6
@@ -12,7 +13,14 @@
  * MOSI		OUT		P1.7(SPI)
  * -----------------------
  */
-#define abs(x) ((x)>0?(x):-(x))
+
+#include <msp430.h>
+
+#include "device/spi.h"
+#include "driver/ssd1331.h"
+#include "system/fonts.h"
+
+#define abs(x)   ((x)>0?(x):-(x))
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
 
@@ -247,8 +255,7 @@ void ssd1331_draw_mono_bitmap(unsigned char chXpos, unsigned char chYpos, const 
             if(*(pchBmp + j * byteWidth + i / 8) & (128 >> (i & 7))) {
                 ssd1331_write_byte(hwForeColor >> 8, SSD1331_DATA);
                 ssd1331_write_byte(hwForeColor, SSD1331_DATA);
-            }
-            else {
+            } else {
                 ssd1331_write_byte(hwBackColor >> 8, SSD1331_DATA);
                 ssd1331_write_byte(hwBackColor, SSD1331_DATA);
             }
@@ -369,8 +376,7 @@ void ssd1331_display_char(unsigned char chXpos, unsigned char chYpos, unsigned c
         for (j = 0; j < 8; j++) {
             if (chTemp & 0x80) {
                 ssd1331_draw_point(chXpos, chYpos, hwForeColor);
-            }
-            else {
+            } else {
                 ssd1331_draw_point(chXpos, chYpos, hwBackColor);
             }
             chTemp <<= 1;
@@ -389,10 +395,9 @@ static unsigned long _pow(unsigned char m, unsigned char n)
 {
     unsigned long result = 1;
 
-    while(n --) result *= m;
+    while (n --) result *= m;
     return result;
 }
-
 
 void ssd1331_display_num(unsigned char chXpos, unsigned char chYpos, unsigned long chNum, unsigned char chLen, unsigned char chFontIndex, unsigned int hwForeColor, unsigned int hwBackColor)
 {
@@ -403,9 +408,9 @@ void ssd1331_display_num(unsigned char chXpos, unsigned char chYpos, unsigned lo
         return;
     }
 
-    for(i = 0; i < chLen; i++) {
+    for (i = 0; i < chLen; i++) {
         chTemp = (chNum / _pow(10, chLen - i - 1)) % 10;
-        if(chShow == 0 && i < (chLen - 1)) {
+        if (chShow == 0 && i < (chLen - 1)) {
             if(chTemp == 0) {
                 ssd1331_display_char(chXpos + fonts_width[chFontIndex] * i, chYpos, ' ', chFontIndex, hwForeColor, hwBackColor);
                 continue;
@@ -415,7 +420,7 @@ void ssd1331_display_num(unsigned char chXpos, unsigned char chYpos, unsigned lo
         }
         ssd1331_display_char(chXpos + fonts_width[chFontIndex] * i, chYpos, chTemp + '0', chFontIndex, hwForeColor, hwBackColor);
     }
-} 
+}
 
 void ssd1331_display_string(unsigned char chXpos, unsigned char chYpos, const char *pchString, unsigned char chFontIndex, unsigned int hwForeColor, unsigned int hwBackColor)
 {
@@ -436,7 +441,7 @@ void ssd1331_display_string(unsigned char chXpos, unsigned char chYpos, const ch
         ssd1331_display_char(chXpos, chYpos, *pchString, chFontIndex, hwForeColor, hwBackColor);
         chXpos += fonts_width[chFontIndex];
         pchString++;
-    } 
+    }
 }
 
 void ssd1331_continuous_scrolling(unsigned char chYpos, unsigned char chHeight, unsigned char chDirection, unsigned char chInterval)
@@ -515,7 +520,7 @@ void ssd1331_show_rainbow(void)
     ssd1331_fill_rect(0x54, 0x00, 0x0C, SSD1331_HEIGHT, Black);
 }
 
-static inline void ssd1331_set_gray_scale_table(void)
+void ssd1331_set_gray_scale_table(void)
 {
     ssd1331_write_byte(SET_GRAY_SCALE_TABLE, SSD1331_CMD);  // Set Pulse Width for Gray Scale Table
     ssd1331_write_byte(0x02, SSD1331_DATA);                 // Gray Scale Level 1

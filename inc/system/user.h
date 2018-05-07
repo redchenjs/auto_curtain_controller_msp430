@@ -2,13 +2,13 @@
  * user.h
  *
  *  Created on: 2016-10-21
- *      Author: redchenjs
+ *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef USER_H_
-#define USER_H_
+#ifndef INC_SYSTEM_USER_H_
+#define INC_SYSTEM_USER_H_
 
-void user_init(void);
-void user_loop(void);
+extern void user_init(void);
+extern void user_loop(void);
 
-#endif
+#endif /* INC_SYSTEM_USER_H_ */

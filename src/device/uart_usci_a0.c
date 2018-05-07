@@ -1,38 +1,39 @@
-#include <msp430.h>
 /*
- * uart.c
+ * uart_usci_a0.c
  *
- *  Created on: 2017-2-19
- *      Author: redchenjs
- */
-/*
+ *  Created on: 2017-02-19
+ *      Author: Jack Chen <redchenjs@live.com>
+ * 
  * ---------UART---------
  * PORT     TYPE    PIN
  * TXD      OUT     P1.2
  * RXD      IN      P1.1
  * ---------------------
  */
-#define SIZE 32
+
+#include <msp430.h>
+
+#define RX_BUFF_SIZE 32
 
 static unsigned char *uart_tx_buff = 0;
-static unsigned char uart_rx_buff[SIZE] = {0};
+static unsigned char uart_rx_buff[RX_BUFF_SIZE] = {0};
 
 static unsigned char uart_tx_num = 0;
 static unsigned char uart_rx_num = 0;
 
 void uart_init(void)
 {
-	P1SEL  |= BIT1 + BIT2;
-	P1SEL2 |= BIT1 + BIT2;
+    P1SEL  |= BIT1 + BIT2;
+    P1SEL2 |= BIT1 + BIT2;
 
     UCA0CTL1 |= UCSWRST;
 
-	UCA0CTL1 |= UCSSEL_2;
-	UCA0BR0  = 139;
-	UCA0BR1  = 0;
+    UCA0CTL1 |= UCSSEL_2;
+    UCA0BR0  = 139;
+    UCA0BR1  = 0;
     UCA0MCTL = UCBRS0;
 
-	UCA0CTL1 &=~UCSWRST;
+    UCA0CTL1 &=~UCSWRST;
 
     UC0IFG &=~(UCA0RXIFG + UCA0TXIFG);
 
@@ -62,7 +63,7 @@ unsigned char uart_receive_frame(unsigned char *p_buff, unsigned char num)
     do {
         *--p_buff = uart_rx_buff[--uart_rx_num];
         cnt++;
-    }while (uart_rx_num > 0);
+    } while (uart_rx_num > 0);
     uart_rx_num = 0;
     __enable_interrupt();
     return cnt;
@@ -74,8 +75,7 @@ inline void uart_tx_isr_handle(void)
         uart_tx_num--;
         uart_tx_buff++;
         UCA0TXBUF = *uart_tx_buff;
-    }
-    else {
+    } else {
         UC0IFG &=~UCA0TXIFG;
         UC0IE  &=~UCA0TXIE;
     }
@@ -83,8 +83,8 @@ inline void uart_tx_isr_handle(void)
 
 inline void uart_rx_isr_handle(void)
 {
-    if (uart_rx_num == SIZE) {
-        uart_rx_num = SIZE-1;
+    if (uart_rx_num == RX_BUFF_SIZE) {
+        uart_rx_num = RX_BUFF_SIZE - 1;
     }
     uart_rx_buff[uart_rx_num++] = UCA0RXBUF;
 }

@@ -1,5 +1,12 @@
-#ifndef SSD1331_H_
-#define SSD1331_H_
+/*
+ * ssd1331.h
+ *
+ *  Created on: 2016-10-20
+ *      Author: Jack Chen <redchenjs@live.com>
+ */
+
+#ifndef INC_DRIVER_SSD1331_H_
+#define INC_DRIVER_SSD1331_H_
 
 extern void ssd1331_draw_point(unsigned char chXpos, unsigned char chYpos, unsigned int hwColor);
 extern void ssd1331_draw_line(unsigned char chXpos0, unsigned char chYpos0, unsigned char chXpos1, unsigned char chYpos1, unsigned int hwColor);
@@ -29,4 +36,4 @@ extern void ssd1331_show_rainbow(void);
 
 extern void ssd1331_init(void);
 
-#endif
+#endif /* INC_DRIVER_SSD1331_H_ */

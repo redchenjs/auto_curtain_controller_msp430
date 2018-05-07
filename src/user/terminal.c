@@ -1,19 +1,22 @@
-#include <module/motor.h>
-#include <module/record.h>
-#include <module/senser.h>
-#include <module/terminal.h>
+/*
+ * terminal.c
+ *
+ *  Created on: 2017-02-19
+ *      Author: Jack Chen <redchenjs@live.com>
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "device/uart.h"
-/*
- * terminal.c
- *
- *  Created on: 2017-2-19
- *      Author: redchenjs
- */
-#define SIZE 32
+
+#include "user/motor.h"
+#include "user/record.h"
+#include "user/senser.h"
+#include "user/terminal.h"
+
+#define READ_BUFF_SIZE 32
 
 enum operate {
     SET = 0x00,
@@ -30,9 +33,9 @@ enum func {
 unsigned char mode_now  = AUTO;
 unsigned char mode_past = AUTO;
 
-static const unsigned char init_message[] = "msp430g2553 initialized.\n";
+static const unsigned char init_message[] = "controller initialized.\n";
 
-static unsigned char read_buff[SIZE] = {0};
+static unsigned char read_buff[READ_BUFF_SIZE] = {0};
 static unsigned char read_buff_num = 0;
 
 char* terminal_sub_string(char* p_string, unsigned char position, unsigned char length)
@@ -57,8 +60,7 @@ void terminal_set_mode(unsigned int value)
 
     if (value == AUTO) {
         mode_now = AUTO;
-    }
-    else {
+    } else {
         mode_now = MANUAL;
     }
 
@@ -76,28 +78,22 @@ unsigned char terminal_match(void)
     p_string = terminal_sub_string((char *)read_buff, 0, 4);
     if (strcmp(p_string, "set\x20") == 0) {
         operate = SET;
-    }
-    else if (strcmp(p_string, "get\x20") == 0) {
+    } else if (strcmp(p_string, "get\x20") == 0) {
         operate = GET;
-    }
-    else {
+    } else {
         return 0;
     }
 
     p_string = terminal_sub_string((char *)read_buff, 4, 4);
     if (strcmp(p_string, "mod\x20") == 0) {
         func = MODE;
-    }
-    else if (strcmp(p_string, "sta\x20") == 0) {
+    } else if (strcmp(p_string, "sta\x20") == 0) {
         func = STAT;
-    }
-    else if (strcmp(p_string, "lux\x20") == 0) {
+    } else if (strcmp(p_string, "lux\x20") == 0) {
         func = LUX;
-    }
-    else if (strcmp(p_string, "pos\x20") == 0) {
+    } else if (strcmp(p_string, "pos\x20") == 0) {
         func = POSITION;
-    }
-    else {
+    } else {
         return 0;
     }
 
@@ -107,18 +103,14 @@ unsigned char terminal_match(void)
             case MODE:
                 if (strcmp(p_string, "auto\n") == 0) {
                     terminal_set_mode(AUTO);
-                }
-                else if (strcmp(p_string, "manu\n") == 0) {
+                } else if (strcmp(p_string, "manu\n") == 0) {
                     terminal_set_mode(MANUAL);
-                }
-                else {
+                } else {
                     return 0;
                 }
-
                 if (mode_now == AUTO) {
                     uart_transmit_frame("auto\n", 5);
-                }
-                else {
+                } else {
                     uart_transmit_frame("manual\n", 7);
                 }
                 break;
@@ -144,11 +136,9 @@ unsigned char terminal_match(void)
                 for (i=0; i<5; i++) {
                     if (p_string[i] >= '0' && p_string[i] <= '9') {
                         value = p_string[i] - '0' + value * 10;
-                    }
-                    else if (p_string[i] == '\n'){
+                    } else if (p_string[i] == '\n'){
                         break;
-                    }
-                    else {
+                    } else {
                         return 0;
                     }
                 }
@@ -160,11 +150,9 @@ unsigned char terminal_match(void)
                 for (i=0; i<5; i++) {
                     if (p_string[i] >= '0' && p_string[i] <= '9') {
                         value = p_string[i] - '0' + value * 10;
-                    }
-                    else if (p_string[i] == '\n'){
+                    } else if (p_string[i] == '\n'){
                         break;
-                    }
-                    else {
+                    } else {
                         return 0;
                     }
                 }
@@ -176,14 +164,12 @@ unsigned char terminal_match(void)
             default:
                 break;
         }
-    }
-    else if (operate == GET) {
+    } else if (operate == GET) {
         switch (func) {
             case MODE:
                 if (mode_now == AUTO) {
                     uart_transmit_frame("auto\n", 5);
-                }
-                else {
+                } else {
                     uart_transmit_frame("manual\n", 7);
                 }
                 break;
@@ -210,12 +196,10 @@ unsigned char terminal_match(void)
                 if (strcmp(p_string, "now\n") == 0) {
                     sprintf(p_string, "%u\n", senser_lux_now);
                     uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
-                }
-                else if (strcmp(p_string, "set\n") == 0) {
+                } else if (strcmp(p_string, "set\n") == 0) {
                     sprintf(p_string, "%u\n", senser_set_now);
                     uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
-                }
-                else {
+                } else {
                     return 0;
                 }
                 break;
@@ -233,10 +217,11 @@ unsigned char terminal_match(void)
 
 void terminal_update(void)
 {
-    read_buff_num = uart_receive_frame(read_buff, SIZE);
+    read_buff_num = uart_receive_frame(read_buff, READ_BUFF_SIZE);
     if (read_buff_num) {
-        if (!terminal_match())
+        if (!terminal_match()) {
             uart_transmit_frame(read_buff, read_buff_num);
+        }
         read_buff_num = 0;
     }
 }

@@ -2,12 +2,12 @@
  * wdt.h
  *
  *  Created on: 2016-10-20
- *      Author: redchenjs
+ *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef WDT_H_
-#define WDT_H_
+#ifndef INC_DEVICE_WDT_H_
+#define INC_DEVICE_WDT_H_
 
 extern void wdt_init(void);
 
-#endif
+#endif /* INC_DEVICE_WDT_H_ */

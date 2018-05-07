@@ -1,15 +1,16 @@
-#include <module/display.h>
-#include <module/link.h>
-#include <module/motor.h>
-#include <module/record.h>
-#include <module/senser.h>
-#include <module/terminal.h>
 /*
  * status.c
  *
- *  Created on: 2017-3-19
- *      Author: redchenjs
+ *  Created on: 2017-03-19
+ *      Author: Jack Chen <redchenjs@live.com>
  */
+
+#include <user/link.h>
+#include <user/motor.h>
+#include <user/record.h>
+#include <user/senser.h>
+#include <user/display.h>
+#include <user/terminal.h>
 
 void status_update(void)
 {
@@ -19,8 +20,7 @@ void status_update(void)
     if (mode_now == AUTO) {
         if (senser_lux_now >= senser_set_now) {
             cnt_above++;
-        }
-        else {
+        } else {
             cnt_below++;
         }
 
@@ -38,11 +38,11 @@ void status_update(void)
             }
         }
 
-        if (display_index_now == 15 && motor_position_now != 0){
+        if (display_index_now == 15 && motor_position_now != 0) {
             motor_set_position(0);
         }
 
-        if (display_index_now == 0 && motor_position_now != 100){
+        if (display_index_now == 0 && motor_position_now != 100) {
             motor_set_position(100);
         }
     }
@@ -56,8 +56,9 @@ void status_init(void)
 
     if (motor_status_now > 3) motor_status_now = 0;
 
-    if (!motor_status_now)
+    if (!motor_status_now) {
         display_index_now = 0;
-    else
+    } else {
         display_index_now = 15;
+    }
 }

@@ -1,14 +1,14 @@
 /*
  * motor.h
  *
- *  Created on: 2016-9-27
- *      Author: redchenjs
+ *  Created on: 2016-09-27
+ *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef MOTOR_H_
-#define MOTOR_H_
+#ifndef INC_USER_MOTOR_H_
+#define INC_USER_MOTOR_H_
 
-enum motor_status {
+enum motor_status_table {
     CLOSED  = 0x00,
     OPENED  = 0x01,
     CLOSING = 0x02,
@@ -25,4 +25,4 @@ extern void motor_init(void);
 extern void motor_update(void);
 extern void motor_set_position(unsigned char value);
 
-#endif
+#endif /* INC_USER_MOTOR_H_ */

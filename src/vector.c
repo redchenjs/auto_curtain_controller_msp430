@@ -1,13 +1,19 @@
-#include <msp430.h>
-#include "device/wdt.h"
-#include "device/spi.h"
-#include "device/uart.h"
-#include "driver/stepper.h"
 /*
  * vector.c
  *
+ *  Created on: 2016-10-26
+ *      Author: Jack Chen <redchenjs@live.com>
  */
- #pragma vector=WDT_VECTOR
+
+#include <msp430.h>
+
+#include "device/wdt.h"
+#include "device/spi.h"
+#include "device/uart.h"
+
+#include "driver/stepper.h"
+
+#pragma vector=WDT_VECTOR
 __interrupt void WDT_ISR(void)
 {
     static unsigned int cnt = 0;
@@ -29,8 +35,7 @@ __interrupt void USCIAB0TX_ISR(void)
 {
     if (UC0IFG & UCA0TXIFG) {
         uart_tx_isr_handle();
-    }
-    else if (UC0IFG & UCB0TXIFG) {
+    } else if (UC0IFG & UCB0TXIFG) {
         spi_tx_isr_handle();
     }
 }
@@ -40,8 +45,7 @@ __interrupt void USCIAB0RX_ISR(void)
 {
     if (UC0IFG & UCA0RXIFG) {
         uart_rx_isr_handle();
-    }
-    else if (UC0IFG & UCB0RXIFG) {
+    } else if (UC0IFG & UCB0RXIFG) {
         spi_rx_isr_handle();
     }
 }

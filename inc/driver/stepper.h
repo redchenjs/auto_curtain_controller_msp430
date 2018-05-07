@@ -1,9 +1,16 @@
-#ifndef STEPPER_H_
-#define STEPPER_H_
+/*
+ * stepper.h
+ *
+ *  Created on: 2016-10-20
+ *      Author: Jack Chen <redchenjs@live.com>
+ */
 
-enum direction {
-    FORWARD  = 0x0,
-    BACKWARD = 0x1
+#ifndef INC_DRIVER_STEPPER_H_
+#define INC_DRIVER_STEPPER_H_
+
+enum stepper_direction_table {
+    FORWARD  = 0x00,
+    BACKWARD = 0x01
 };
 
 extern unsigned char stepper_ready;
@@ -17,4 +24,4 @@ extern void stepper_step(unsigned int steps_to_move, unsigned char direction);
 
 extern void stepper_timer_isr_handle(void);
 
-#endif
+#endif /* INC_DRIVER_STEPPER_H_ */

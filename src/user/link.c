@@ -1,10 +1,12 @@
-#include "driver/bluetooth.h"
 /*
  * link.c
  *
- *  Created on: 2017-3-16
- *      Author: redchenjs
+ *  Created on: 2017-03-16
+ *      Author: Jack Chen <redchenjs@live.com>
  */
+
+#include "driver/bluetooth.h"
+
 unsigned int link_status_now  = OFFLINE;
 unsigned int link_status_past = OFFLINE;
 

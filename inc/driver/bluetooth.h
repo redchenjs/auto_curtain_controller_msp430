@@ -1,22 +1,21 @@
 /*
  * bluetooth.h
  *
- *  Created on: 2017-3-9
- *      Author: redchenjs
+ *  Created on: 2017-03-09
+ *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef BLUETOOTH_H_
-#define BLUETOOTH_H_
+#ifndef INC_DRIVER_BLUETOOTH_H_
+#define INC_DRIVER_BLUETOOTH_H_
 
 extern unsigned int blu_link_status;
 
-enum blu_status {
-    ONLINE  = 0x1,
-    OFFLINE = 0x0
+enum blutooth_status_table {
+    OFFLINE = 0x00,
+    ONLINE  = 0x01
 };
 
 extern void blu_refresh(void);
-
 extern void blu_init(void);
 
 #endif /* INC_DRIVER_BLUETOOTH_H_ */

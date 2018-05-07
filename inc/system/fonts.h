@@ -1,9 +1,16 @@
-#ifndef FONTS_H
-#define FONTS_H
+/*
+ * fonts.h
+ *
+ *  Created on: 2016-10-20
+ *      Author: Jack Chen <redchenjs@live.com>
+ */
+
+#ifndef INC_SYSTEM_FONTS_H_
+#define INC_SYSTEM_FONTS_H_
 
 #define RGB(R,G,B)  (((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3))
 
-enum fonts_color {
+enum color_table {
     LightPink               = RGB(255,182,193),
     Pink                    = RGB(255,192,203),
     Crimson                 = RGB(220, 20, 60),
@@ -139,14 +146,14 @@ enum fonts_color {
     DarkGray                = RGB(169,169,169),
     Gray                    = RGB(128,128,128),
     DimGray                 = RGB(105,105,105),
-    Black                   = RGB(0,0,0)
+    Black                   = RGB(  0,  0,  0)
 };
 
 enum fonts_size {
-    FONT_1206   = 0,
-    FONT_1608   = 1,
-    FONT_1616   = 2,
-    FONT_3216   = 3
+    FONT_1206 = 0,
+    FONT_1608 = 1,
+    FONT_1616 = 2,
+    FONT_3216 = 3
 };
 
 extern const unsigned char fonts_height[];
@@ -165,4 +172,4 @@ extern const unsigned char c_chBat816[16];
 extern const unsigned char c_chGPRS88[8];
 extern const unsigned char c_chAlarm88[8];
 
-#endif
+#endif /* INC_SYSTEM_FONTS_H_ */

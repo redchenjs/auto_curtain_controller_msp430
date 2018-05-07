@@ -1,13 +1,13 @@
 /*
- * BCSplus_init.h
+ * bcs.h
  *
- *  Created on: 2016-3-22
- *      Author: redchenjs
+ *  Created on: 2016-03-22
+ *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef BCS_H_
-#define BCS_H_
+#ifndef INC_DEVICE_BCS_H_
+#define INC_DEVICE_BCS_H_
 
 extern void bcs_init(void);
 
-#endif
+#endif /* INC_DEVICE_BCS_H_ */

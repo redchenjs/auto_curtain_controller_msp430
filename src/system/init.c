@@ -1,8 +1,16 @@
+/*
+ * init.c
+ *
+ *  Created on: 2016-10-20
+ *      Author: Jack Chen <redchenjs@live.com>
+ */
+
 #include "device/bcs.h"
 #include "device/wdt.h"
 #include "device/i2c.h"
 #include "device/spi.h"
 #include "device/uart.h"
+
 #include "driver/bh1750.h"
 #include "driver/ssd1331.h"
 #include "driver/stepper.h"
@@ -21,11 +29,4 @@ void driver_init(void)
     bh1750_init();
     ssd1331_init();
     stepper_init();
-}
-
-void system_init(void)
-{
-    device_init();
-
-    driver_init();
 }

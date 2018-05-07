@@ -1,8 +1,8 @@
-#include <msp430.h>
-#include "system/init.h"
-#include "system/user.h"
 /*
  * main.c
+ *
+ *  Created on: 2016-10-26
+ *      Author: Jack Chen <redchenjs@live.com>
  *
  *                   MSP430G2553
  *                ------------------
@@ -23,19 +23,25 @@
  *   stepper_d<--|P2.3          P3.5|--x
  *            x--|P2.4          P2.5|--x
  *                ------------------
- *
  */
 
-int main(void) {
+#include <msp430.h>
+
+#include "system/init.h"
+#include "system/user.h"
+
+int main(void)
+{
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
-	
-    system_init();
+
+    device_init();
+    driver_init();
 
     user_init();
 
     while (1) {
-    	user_loop();
+        user_loop();
 
-    	__bis_SR_register(LPM0_bits + GIE);
+        __bis_SR_register(LPM0_bits + GIE);
     }
 }
