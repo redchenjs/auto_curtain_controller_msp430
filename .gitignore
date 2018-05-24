@@ -1,3 +1,7 @@
+.ccsproject
+.cproject
+.project
+targetConfigs/
 Debug/
 Release/
 .launches/
