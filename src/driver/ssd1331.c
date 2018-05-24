@@ -591,6 +591,7 @@ void ssd1331_set_gray_scale_table(void)
 void ssd1331_init(void)
 {
     SSD1331_PIN_SET();
+    SSD1331_RES_SET();
 
     ssd1331_write_byte(SET_DISPLAY_OFF, SSD1331_CMD);           // Display Off
 
@@ -636,7 +637,7 @@ void ssd1331_init(void)
     ssd1331_write_byte(0x7D, SSD1331_CMD);                      // 125 0x7D
 
     ssd1331_write_byte(SET_BUILTIN_LINEAR_LUT, SSD1331_CMD);    // Default
-//    ssd1331_set_gray_scale_table();                             // Set Pulse Width for Gray Scale Table
+    ssd1331_set_gray_scale_table();                             // Set Pulse Width for Gray Scale Table
 
     ssd1331_clear_gram();
 
