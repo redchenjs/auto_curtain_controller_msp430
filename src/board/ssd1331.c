@@ -4,23 +4,23 @@
  *  Created on: 2016-10-20
  *      Author: Jack Chen <redchenjs@live.com>
  *
- * --------SSD1331--------
- * PORT     TYPE    PIN
- *  RES      OUT    P3.6
- *   DC      OUT    P3.7
- *   CS      OUT    P1.4
- *  SCK      OUT    P1.5(SPI)
- * MOSI      OUT    P1.7(SPI)
- * -----------------------
+ * ---------SSD1331---------
+ * PORT    TYPE    PIN
+ *  RES     OUT    P3.6
+ *   DC     OUT    P3.7
+ *   CS     OUT    P1.4
+ *  SCK     OUT    P1.5(SPI)
+ * MOSI     OUT    P1.7(SPI)
+ * -------------------------
  */
 
 #include <msp430.h>
 
+#include "core/fonts.h"
+
 #include "chip/spi.h"
 
 #include "board/ssd1331.h"
-
-#include "core/fonts.h"
 
 #define abs(x)   ((x)>0?(x):-(x))
 #define min(a,b) ((a)<(b)?(a):(b))
