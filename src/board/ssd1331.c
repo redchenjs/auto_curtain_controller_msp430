@@ -16,9 +16,11 @@
 
 #include <msp430.h>
 
-#include "device/spi.h"
-#include "driver/ssd1331.h"
-#include "system/fonts.h"
+#include "chip/spi.h"
+
+#include "board/ssd1331.h"
+
+#include "core/fonts.h"
 
 #define abs(x)   ((x)>0?(x):-(x))
 #define min(a,b) ((a)<(b)?(a):(b))

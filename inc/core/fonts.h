@@ -5,8 +5,8 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef INC_SYSTEM_FONTS_H_
-#define INC_SYSTEM_FONTS_H_
+#ifndef INC_CORE_FONTS_H_
+#define INC_CORE_FONTS_H_
 
 #define RGB(R,G,B)  (((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3))
 
@@ -172,4 +172,4 @@ extern const unsigned char c_chBat816[16];
 extern const unsigned char c_chGPRS88[8];
 extern const unsigned char c_chAlarm88[8];
 
-#endif /* INC_SYSTEM_FONTS_H_ */
+#endif /* INC_CORE_FONTS_H_ */

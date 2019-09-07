@@ -5,9 +5,9 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#include "device/i2c.h"
+#include "chip/i2c.h"
 
-#include "driver/bh1750.h"
+#include "board/bh1750.h"
 
 #define BH1750_ADDRESS 0x23
 

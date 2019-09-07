@@ -5,8 +5,8 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef INC_DRIVER_BLUETOOTH_H_
-#define INC_DRIVER_BLUETOOTH_H_
+#ifndef INC_BOARD_BLUETOOTH_H_
+#define INC_BOARD_BLUETOOTH_H_
 
 extern unsigned int blu_link_status;
 
@@ -18,4 +18,4 @@ enum blutooth_status_table {
 extern void blu_refresh(void);
 extern void blu_init(void);
 
-#endif /* INC_DRIVER_BLUETOOTH_H_ */
+#endif /* INC_BOARD_BLUETOOTH_H_ */

@@ -5,8 +5,8 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef INC_DRIVER_BH1750_H
-#define INC_DRIVER_BH1750_H
+#ifndef INC_BOARD_BH1750_H
+#define INC_BOARD_BH1750_H
 
 enum bh1750_mode_table {
     ONE_TIME_H_RESOLUTION_MODE = 0x20
@@ -20,4 +20,4 @@ extern unsigned int bh1750_get_lux(void);
 extern void bh1750_set_mode(unsigned char mode);
 extern void bh1750_init(void);
 
-#endif /* INC_DRIVER_BH1750_H */
+#endif /* INC_BOARD_BH1750_H */

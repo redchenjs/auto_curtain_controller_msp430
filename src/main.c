@@ -27,15 +27,65 @@
 
 #include <msp430.h>
 
-#include "system/init.h"
-#include "system/user.h"
+#include "chip/bcs.h"
+#include "chip/wdt.h"
+#include "chip/i2c.h"
+#include "chip/spi.h"
+#include "chip/uart.h"
+
+#include "board/bh1750.h"
+#include "board/ssd1331.h"
+#include "board/stepper.h"
+
+#include <user/link.h>
+#include <user/motor.h>
+#include <user/record.h>
+#include <user/senser.h>
+#include <user/status.h>
+#include <user/display.h>
+#include <user/terminal.h>
+
+static void chip_init(void)
+{
+    bcs_init();
+    wdt_init();
+    i2c_init();
+    spi_init();
+    uart_init();
+}
+
+static void board_init(void)
+{
+    bh1750_init();
+    ssd1331_init();
+    stepper_init();
+}
+
+static void user_init(void)
+{
+    record_read_all();
+    status_init();
+    motor_init();
+    display_init();
+    terminal_init();
+}
+
+static void user_loop(void)
+{
+    terminal_update();
+    senser_update();
+    link_update();
+    status_update();
+    motor_update();
+    display_update();
+}
 
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
 
-    device_init();
-    driver_init();
+    chip_init();
+    board_init();
 
     user_init();
 

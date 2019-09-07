@@ -5,12 +5,12 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef INC_DEVICE_I2C_H_
-#define INC_DEVICE_I2C_H_
+#ifndef INC_CHIP_I2C_H_
+#define INC_CHIP_I2C_H_
 
 extern void i2c_init(void);
 
 extern unsigned char i2c_transmit_frame(unsigned char slave_addr, unsigned char *p_buff, unsigned char num);
 extern unsigned char i2c_receive_frame(unsigned char slave_addr, unsigned char *p_buff, unsigned char num);
 
-#endif /* INC_DEVICE_I2C_H_ */
+#endif /* INC_CHIP_I2C_H_ */

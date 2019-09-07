@@ -8,7 +8,7 @@
 #include <user/link.h>
 #include <user/motor.h>
 #include <user/record.h>
-#include <user/senser.h>
+#include <user/sensor.h>
 #include <user/display.h>
 #include <user/terminal.h>
 
@@ -18,7 +18,7 @@ void status_update(void)
     static unsigned int cnt_below = 0;
 
     if (mode_now == AUTO) {
-        if (senser_lux_now >= senser_set_now) {
+        if (sensor_lux_now >= sensor_set_now) {
             cnt_above++;
         } else {
             cnt_below++;

@@ -5,7 +5,7 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#include "driver/stepper.h"
+#include "board/stepper.h"
 
 #include "user/motor.h"
 #include "user/record.h"

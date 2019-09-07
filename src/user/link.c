@@ -5,7 +5,7 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#include "driver/bluetooth.h"
+#include "board/bluetooth.h"
 
 unsigned int link_status_now  = OFFLINE;
 unsigned int link_status_past = OFFLINE;

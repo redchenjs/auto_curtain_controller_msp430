@@ -5,8 +5,8 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef INC_DRIVER_STEPPER_H_
-#define INC_DRIVER_STEPPER_H_
+#ifndef INC_BOARD_STEPPER_H_
+#define INC_BOARD_STEPPER_H_
 
 enum stepper_direction_table {
     FORWARD  = 0x00,
@@ -24,4 +24,4 @@ extern void stepper_step(unsigned int steps_to_move, unsigned char direction);
 
 extern void stepper_timer_isr_handle(void);
 
-#endif /* INC_DRIVER_STEPPER_H_ */
+#endif /* INC_BOARD_STEPPER_H_ */

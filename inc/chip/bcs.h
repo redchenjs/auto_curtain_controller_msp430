@@ -5,9 +5,9 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef INC_DEVICE_BCS_H_
-#define INC_DEVICE_BCS_H_
+#ifndef INC_CHIP_BCS_H_
+#define INC_CHIP_BCS_H_
 
 extern void bcs_init(void);
 
-#endif /* INC_DEVICE_BCS_H_ */
+#endif /* INC_CHIP_BCS_H_ */

@@ -5,13 +5,13 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#include "device/bcs.h"
-#include "device/flash.h"
+#include "chip/bcs.h"
+#include "chip/flash.h"
 
-#include "driver/stepper.h"
+#include "board/stepper.h"
 
 #include "user/motor.h"
-#include "user/senser.h"
+#include "user/sensor.h"
 #include "user/display.h"
 #include "user/terminal.h"
 
@@ -31,7 +31,7 @@ void record_write_all(void)
     flash_direct_write_char(MOTOR_POSITION_ADDRESS, motor_position_now);
 
     flash_direct_write_char(MODE_SET_ADDRESS, mode_now);
-    flash_direct_write_word(SENSER_SET_ADDRESS, senser_set_now);
+    flash_direct_write_word(SENSER_SET_ADDRESS, sensor_set_now);
 }
 
 void record_read_all(void)
@@ -41,5 +41,5 @@ void record_read_all(void)
     motor_status_now   = flash_read_char(MOTOR_STATUS_ADDRESS);
     motor_position_now = flash_read_word(MOTOR_POSITION_ADDRESS);
     mode_now           = flash_read_char(MODE_SET_ADDRESS);
-    senser_set_now     = flash_read_word(SENSER_SET_ADDRESS);
+    sensor_set_now     = flash_read_word(SENSER_SET_ADDRESS);
 }

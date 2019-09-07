@@ -5,8 +5,8 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef INC_DEVICE_FLASH_H_
-#define INC_DEVICE_FLASH_H_
+#ifndef INC_CHIP_FLASH_H_
+#define INC_CHIP_FLASH_H_
 
 extern unsigned char flash_init(unsigned char div, unsigned char seg);
 extern void flash_erase(void);
@@ -19,4 +19,4 @@ extern char flash_bak_write_char(unsigned int addr, unsigned char data);
 extern char flash_bak_write_word(unsigned int addr, unsigned int data);
 extern unsigned char flash_seg_a_read_char(unsigned int addr);
 
-#endif /* INC_DEVICE_FLASH_H_ */
+#endif /* INC_CHIP_FLASH_H_ */

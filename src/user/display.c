@@ -7,14 +7,14 @@
 
 #include <stdio.h>
 
-#include "driver/ssd1331.h"
-#include "driver/bluetooth.h"
+#include "board/ssd1331.h"
+#include "board/bluetooth.h"
 
-#include "system/fonts.h"
+#include "core/fonts.h"
 
 #include "user/link.h"
 #include "user/motor.h"
-#include "user/senser.h"
+#include "user/sensor.h"
 #include "user/terminal.h"
 
 static unsigned char init_flag = 0;
@@ -31,24 +31,24 @@ void display_refresh_lux(void)
 {
     static char disp_lux[6];
 
-    if (senser_lux_now != senser_lux_past || init_flag) {
-        sprintf(disp_lux, "%5u", senser_lux_now);
+    if (sensor_lux_now != sensor_lux_past || init_flag) {
+        sprintf(disp_lux, "%5u", sensor_lux_now);
         ssd1331_display_string(48, 0, disp_lux, FONT_1206, Yellow, Black);
     }
 
-    senser_lux_past = senser_lux_now;
+    sensor_lux_past = sensor_lux_now;
 }
 
 void display_refresh_set(void)
 {
     static char disp_set[6];
 
-    if (senser_set_now != senser_set_past || init_flag) {
-        sprintf(disp_set, "%5u", senser_set_now);
+    if (sensor_set_now != sensor_set_past || init_flag) {
+        sprintf(disp_set, "%5u", sensor_set_now);
         ssd1331_display_string(48, 16, disp_set, FONT_1206, Purple, Black);
     }
 
-    senser_set_past = senser_set_now;
+    sensor_set_past = sensor_set_now;
 }
 
 void display_refresh_status(void)

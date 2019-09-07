@@ -7,7 +7,7 @@
 
 #include <msp430.h>
 
-#include "driver/bluetooth.h"
+#include "board/bluetooth.h"
 
 unsigned int blu_link_status = OFFLINE;
 

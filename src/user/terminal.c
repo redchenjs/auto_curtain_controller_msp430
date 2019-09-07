@@ -9,16 +9,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "device/uart.h"
+#include "chip/uart.h"
 
 #include "user/motor.h"
 #include "user/record.h"
-#include "user/senser.h"
+#include "user/sensor.h"
 #include "user/terminal.h"
 
 #define READ_BUFF_SIZE 32
 
-enum operate {
+enum ops {
     SET = 0x00,
     GET = 0x01
 };
@@ -72,14 +72,14 @@ unsigned char terminal_match(void)
     unsigned char i;
     char string[32] = {0};
     char *p_string = string;
-    unsigned char operate, func;
+    unsigned char ops, func;
     unsigned int value = 0;
 
     p_string = terminal_sub_string((char *)read_buff, 0, 4);
     if (strcmp(p_string, "set\x20") == 0) {
-        operate = SET;
+        ops = SET;
     } else if (strcmp(p_string, "get\x20") == 0) {
-        operate = GET;
+        ops = GET;
     } else {
         return 0;
     }
@@ -97,7 +97,7 @@ unsigned char terminal_match(void)
         return 0;
     }
 
-    if (operate == SET) {
+    if (ops == SET) {
         p_string = terminal_sub_string((char *)read_buff, 8, 5);
         switch (func) {
             case MODE:
@@ -142,8 +142,8 @@ unsigned char terminal_match(void)
                         return 0;
                     }
                 }
-                senser_set_lux(value);
-                sprintf(p_string, "%u\n", senser_set_now);
+                sensor_set_lux(value);
+                sprintf(p_string, "%u\n", sensor_set_now);
                 uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
                 break;
             case POSITION:
@@ -164,7 +164,7 @@ unsigned char terminal_match(void)
             default:
                 break;
         }
-    } else if (operate == GET) {
+    } else if (ops == GET) {
         switch (func) {
             case MODE:
                 if (mode_now == AUTO) {
@@ -194,10 +194,10 @@ unsigned char terminal_match(void)
             case LUX:
                 p_string = terminal_sub_string((char *)read_buff, 8, 4);
                 if (strcmp(p_string, "now\n") == 0) {
-                    sprintf(p_string, "%u\n", senser_lux_now);
+                    sprintf(p_string, "%u\n", sensor_lux_now);
                     uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
                 } else if (strcmp(p_string, "set\n") == 0) {
-                    sprintf(p_string, "%u\n", senser_set_now);
+                    sprintf(p_string, "%u\n", sensor_set_now);
                     uart_transmit_frame((unsigned char *)p_string, strlen(p_string));
                 } else {
                     return 0;

@@ -7,9 +7,9 @@
 
 #include <msp430.h>
 
-#include "device/wdt.h"
-#include "device/spi.h"
-#include "device/uart.h"
+#include "chip/wdt.h"
+#include "chip/spi.h"
+#include "chip/uart.h"
 
 #include "driver/stepper.h"
 

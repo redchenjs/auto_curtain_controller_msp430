@@ -5,9 +5,9 @@
  *      Author: Jack Chen <redchenjs@live.com>
  */
 
-#ifndef INC_DEVICE_WDT_H_
-#define INC_DEVICE_WDT_H_
+#ifndef INC_CHIP_WDT_H_
+#define INC_CHIP_WDT_H_
 
 extern void wdt_init(void);
 
-#endif /* INC_DEVICE_WDT_H_ */
+#endif /* INC_CHIP_WDT_H_ */
