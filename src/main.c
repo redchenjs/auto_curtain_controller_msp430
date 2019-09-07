@@ -32,7 +32,7 @@
 
 int main(void)
 {
-    WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
+    WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
 
     device_init();
     driver_init();

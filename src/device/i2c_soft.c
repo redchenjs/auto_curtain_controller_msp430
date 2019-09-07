@@ -13,11 +13,11 @@
                             P3DIR &=~BIT1;\
                             P3OUT &=~BIT1;\
                         }
-#define I2C_SCL_SET()	P3DIR &=~BIT0
-#define I2C_SCL_CLR()	P3DIR |= BIT0
-#define I2C_SDA_SET()	P3DIR &=~BIT1
-#define I2C_SDA_CLR()	P3DIR |= BIT1
-#define I2C_SDA_IN()	P3IN  &  BIT1
+#define I2C_SCL_SET()   P3DIR &=~BIT0
+#define I2C_SCL_CLR()   P3DIR |= BIT0
+#define I2C_SDA_SET()   P3DIR &=~BIT1
+#define I2C_SDA_CLR()   P3DIR |= BIT1
+#define I2C_SDA_IN()    P3IN  &  BIT1
 
 #define FREQ_CPU 16000000
 

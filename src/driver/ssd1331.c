@@ -3,14 +3,14 @@
  *
  *  Created on: 2016-10-20
  *      Author: Jack Chen <redchenjs@live.com>
- * 
+ *
  * --------SSD1331--------
- * PORT		TYPE	PIN
- * RES		OUT		P3.6
- * DC		OUT		P3.7
- * CS		OUT		P1.4
- * SCK		OUT		P1.5(SPI)
- * MOSI		OUT		P1.7(SPI)
+ * PORT     TYPE    PIN
+ *  RES      OUT    P3.6
+ *   DC      OUT    P3.7
+ *   CS      OUT    P1.4
+ *  SCK      OUT    P1.5(SPI)
+ * MOSI      OUT    P1.7(SPI)
  * -----------------------
  */
 
@@ -24,16 +24,16 @@
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
 
-#define SSD1331_PIN_SET()	P3DIR |= BIT6; P3DIR |= BIT7; P1DIR |= BIT4
+#define SSD1331_PIN_SET()   P3DIR |= BIT6; P3DIR |= BIT7; P1DIR |= BIT4
 
-#define SSD1331_RES_SET()	P3OUT |= BIT6
-#define SSD1331_RES_CLR()	P3OUT &=~BIT6
-#define SSD1331_DC_SET()	P3OUT |= BIT7
-#define SSD1331_DC_CLR()	P3OUT &=~BIT7
-#define SSD1331_CS_SET()	P1OUT |= BIT4
-#define SSD1331_CS_CLR()	P1OUT &=~BIT4
+#define SSD1331_RES_SET()   P3OUT |= BIT6
+#define SSD1331_RES_CLR()   P3OUT &=~BIT6
+#define SSD1331_DC_SET()    P3OUT |= BIT7
+#define SSD1331_DC_CLR()    P3OUT &=~BIT7
+#define SSD1331_CS_SET()    P1OUT |= BIT4
+#define SSD1331_CS_CLR()    P1OUT &=~BIT4
 
-#define SSD1331_WRITE_BYTE(__DATA)	spi_transmit_frame(&__DATA, 1)
+#define SSD1331_WRITE_BYTE(__DATA)    spi_transmit_frame(&__DATA, 1)
 
 enum ssd1331_panel_value {
     SSD1331_WIDTH  = 96,
@@ -124,7 +124,7 @@ void ssd1331_draw_point(unsigned char chXpos, unsigned char chYpos, unsigned int
     ssd1331_write_byte(SET_ROW_ADDRESS, SSD1331_CMD);
     ssd1331_write_byte(chYpos, SSD1331_CMD);
     ssd1331_write_byte(chYpos, SSD1331_CMD);
-    
+
     ssd1331_write_byte(hwColor >> 8, SSD1331_DATA);
     ssd1331_write_byte(hwColor, SSD1331_DATA);
 }
@@ -388,7 +388,7 @@ void ssd1331_display_char(unsigned char chXpos, unsigned char chYpos, unsigned c
                 break;
             }
         }
-    } 
+    }
 }
 
 static unsigned long _pow(unsigned char m, unsigned char n)
@@ -428,7 +428,7 @@ void ssd1331_display_string(unsigned char chXpos, unsigned char chYpos, const ch
         return;
     }
 
-    while (*pchString != '\0') {       
+    while (*pchString != '\0') {
         if (chXpos > (SSD1331_WIDTH - fonts_width[chFontIndex])) {
             chXpos = 0;
             chYpos += fonts_height[chFontIndex];
