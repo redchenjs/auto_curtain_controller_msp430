@@ -40,7 +40,7 @@
 #include <user/link.h>
 #include <user/motor.h>
 #include <user/record.h>
-#include <user/senser.h>
+#include <user/sensor.h>
 #include <user/status.h>
 #include <user/display.h>
 #include <user/terminal.h>
@@ -73,7 +73,7 @@ static void user_init(void)
 static void user_loop(void)
 {
     terminal_update();
-    senser_update();
+    sensor_update();
     link_update();
     status_update();
     motor_update();

@@ -11,7 +11,7 @@
 #include "chip/spi.h"
 #include "chip/uart.h"
 
-#include "driver/stepper.h"
+#include "board/stepper.h"
 
 #pragma vector=WDT_VECTOR
 __interrupt void WDT_ISR(void)
