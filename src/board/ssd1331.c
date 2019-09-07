@@ -35,7 +35,7 @@
 #define SSD1331_CS_SET()    P1OUT |= BIT4
 #define SSD1331_CS_CLR()    P1OUT &=~BIT4
 
-#define SSD1331_WRITE_BYTE(__DATA)    spi_transmit_frame(&__DATA, 1)
+#define SSD1331_WRITE_BYTE(__DATA)  spi_transmit_frame(&__DATA, 1)
 
 enum ssd1331_panel_value {
     SSD1331_WIDTH  = 96,
@@ -638,7 +638,6 @@ void ssd1331_init(void)
     ssd1331_write_byte(SET_CONTRAST_C, SSD1331_CMD);            // Set Contrast Current for Color C
     ssd1331_write_byte(0x7D, SSD1331_CMD);                      // 125 0x7D
 
-    ssd1331_write_byte(SET_BUILTIN_LINEAR_LUT, SSD1331_CMD);    // Default
     ssd1331_set_gray_scale_table();                             // Set Pulse Width for Gray Scale Table
 
     ssd1331_clear_gram();
